@@ -236,15 +236,6 @@
   </url>
   
   <url>
-    <loc>https://bananashipsbbq.github.io/box/gallery/index.html</loc>
-    
-    <lastmod>2024-05-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://bananashipsbbq.github.io/box/animation/index.html</loc>
     
     <lastmod>2024-05-12</lastmod>
@@ -281,6 +272,15 @@
   </url>
   
   <url>
+    <loc>https://bananashipsbbq.github.io/box/gallery/index.html</loc>
+    
+    <lastmod>2024-05-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://bananashipsbbq.github.io/life/movies/index.html</loc>
     
     <lastmod>2024-05-12</lastmod>
@@ -299,15 +299,6 @@
   </url>
   
   <url>
-    <loc>https://bananashipsbbq.github.io/personal/bb/index.html</loc>
-    
-    <lastmod>2024-05-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://bananashipsbbq.github.io/personal/love/index.html</loc>
     
     <lastmod>2024-05-12</lastmod>
@@ -317,7 +308,7 @@
   </url>
   
   <url>
-    <loc>https://bananashipsbbq.github.io/social/fcircle/index.html</loc>
+    <loc>https://bananashipsbbq.github.io/personal/bb/index.html</loc>
     
     <lastmod>2024-05-12</lastmod>
     
@@ -336,6 +327,15 @@
   
   <url>
     <loc>https://bananashipsbbq.github.io/site/time/index.html</loc>
+    
+    <lastmod>2024-05-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://bananashipsbbq.github.io/social/fcircle/index.html</loc>
     
     <lastmod>2024-05-12</lastmod>
     
@@ -376,14 +376,14 @@
   </url>
   
   <url>
-    <loc>https://bananashipsbbq.github.io/tags/DLL%E9%9A%90%E8%97%8F/</loc>
+    <loc>https://bananashipsbbq.github.io/tags/PE/</loc>
     <lastmod>2024-12-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://bananashipsbbq.github.io/tags/PE/</loc>
+    <loc>https://bananashipsbbq.github.io/tags/DLL%E9%9A%90%E8%97%8F/</loc>
     <lastmod>2024-12-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
