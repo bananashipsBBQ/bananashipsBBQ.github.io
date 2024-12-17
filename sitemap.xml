@@ -263,61 +263,16 @@
   </url>
   
   <url>
-    <loc>https://bananashipsbbq.github.io/life/movies/index.html</loc>
-    
-    <lastmod>2024-05-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://bananashipsbbq.github.io/life/games/index.html</loc>
-    
-    <lastmod>2024-05-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://bananashipsbbq.github.io/life/music/index.html</loc>
-    
-    <lastmod>2024-05-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://bananashipsbbq.github.io/social/fcircle/index.html</loc>
-    
-    <lastmod>2024-05-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://bananashipsbbq.github.io/site/census/index.html</loc>
-    
-    <lastmod>2024-05-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://bananashipsbbq.github.io/site/time/index.html</loc>
-    
-    <lastmod>2024-05-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://bananashipsbbq.github.io/personal/about/index.html</loc>
+    
+    <lastmod>2024-05-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://bananashipsbbq.github.io/personal/bb/index.html</loc>
     
     <lastmod>2024-05-12</lastmod>
     
@@ -335,7 +290,52 @@
   </url>
   
   <url>
-    <loc>https://bananashipsbbq.github.io/personal/bb/index.html</loc>
+    <loc>https://bananashipsbbq.github.io/life/games/index.html</loc>
+    
+    <lastmod>2024-05-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://bananashipsbbq.github.io/life/movies/index.html</loc>
+    
+    <lastmod>2024-05-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://bananashipsbbq.github.io/site/census/index.html</loc>
+    
+    <lastmod>2024-05-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://bananashipsbbq.github.io/life/music/index.html</loc>
+    
+    <lastmod>2024-05-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://bananashipsbbq.github.io/site/time/index.html</loc>
+    
+    <lastmod>2024-05-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://bananashipsbbq.github.io/social/fcircle/index.html</loc>
     
     <lastmod>2024-05-12</lastmod>
     
@@ -432,14 +432,14 @@
   </url>
   
   <url>
-    <loc>https://bananashipsbbq.github.io/tags/pwn/</loc>
+    <loc>https://bananashipsbbq.github.io/tags/CrackMe/</loc>
     <lastmod>2024-12-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://bananashipsbbq.github.io/tags/CrackMe/</loc>
+    <loc>https://bananashipsbbq.github.io/tags/pwn/</loc>
     <lastmod>2024-12-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
