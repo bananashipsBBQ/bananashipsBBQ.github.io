@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="24H&amp;N逆向-WP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="24H&amp;N逆向-WP">
+<meta property="og:url" content="https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/index.html">
+<meta property="og:site_name" content="黄昏之时.">
+<meta property="og:description" content="24H&amp;N逆向-WP">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004300765-2002990542.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004320573-1023745532.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004336318-51756066.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004358274-2100022846.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004416758-209971143.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516002257085-1091112832.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516002948714-1098707363.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004438942-1561112150.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004546672-523054618.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004640655-119042299.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004658781-97328075.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004738868-1690107087.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516005145747-598323821.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516005400463-1380820770.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530000438947-619383326.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530001026259-438172162.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530001451226-2144095101.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530001630826-370473968.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530001755218-1391186822.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530002056652-238907132.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530002402983-212840179.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530002734619-830770876.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530003032128-656646520.png">
+<meta property="article:published_time" content="2024-06-06T09:13:35.000Z">
+<meta property="article:modified_time" content="2024-06-06T10:27:36.866Z">
+<meta property="article:author" content="bananaships">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004300765-2002990542.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>24H&amp;N逆向-WP</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&text=24H&amp;N逆向-WP"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&title=24H&amp;N逆向-WP"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&is_video=false&description=24H&amp;N逆向-WP"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=24H&amp;N逆向-WP&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&title=24H&amp;N逆向-WP"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&title=24H&amp;N逆向-WP"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&title=24H&amp;N逆向-WP"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&title=24H&amp;N逆向-WP"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&name=24H&amp;N逆向-WP&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&t=24H&amp;N逆向-WP"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#24H-N%E9%80%86%E5%90%91%E9%83%A8%E5%88%86wp"><span class="toc-number">1.</span> <span class="toc-text">24H&amp;N逆向部分wp</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E9%80%86%E5%90%91%E9%A2%98"><span class="toc-number">1.0.1.</span> <span class="toc-text">最喜欢的逆向题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DO-YOU-KNOW-SWDD"><span class="toc-number">1.0.2.</span> <span class="toc-text">DO YOU KNOW SWDD?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hwanna"><span class="toc-number">1.0.3.</span> <span class="toc-text">hwanna</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#childmaze"><span class="toc-number">1.0.4.</span> <span class="toc-text">childmaze</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Baby-OBVBS"><span class="toc-number">1.0.5.</span> <span class="toc-text">Baby_OBVBS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E7%9A%84%E7%9C%BC%E7%9D%9B"><span class="toc-number">1.0.6.</span> <span class="toc-text">隐藏的眼睛</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        24H&amp;N逆向-WP
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">bananaships</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-06-06T09:13:35.000Z" class="dt-published" itemprop="datePublished">2024-06-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Writeup/">Writeup</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/CTF/" rel="tag">CTF</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="24H-N逆向部分wp"><a href="#24H-N逆向部分wp" class="headerlink" title="24H&amp;N逆向部分wp"></a>24H&amp;N逆向部分wp</h1><p>菜鸡新手师傅wp，Re 5&#x2F;9，记录一下qaq</p>
+<h3 id="最喜欢的逆向题"><a href="#最喜欢的逆向题" class="headerlink" title="最喜欢的逆向题"></a><strong>最喜欢的逆向题</strong></h3><p>64位，进主函数之后直接看，要求输入第5位为i，然后后面依次相等，长度为24，就输出flag</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004300765-2002990542.png" alt="image-20240516004257710"></p>
+<p>按照要求输入即可：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004320573-1023745532.png" alt="image-20240516004318413"></p>
+<h3 id="DO-YOU-KNOW-SWDD"><a href="#DO-YOU-KNOW-SWDD" class="headerlink" title="DO YOU KNOW SWDD?"></a>DO YOU KNOW SWDD?</h3><p>主函数中函数并不多，一直跟进sub_41127B到最后你就会发现就是一个简单的smc</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004336318-51756066.png" alt="image-20240516004333994"></p>
+<p>待解密部分：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004358274-2100022846.png" alt="image-20240516004355826"></p>
+<p>idapython patch一下即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">addr = <span class="number">0x00417000</span></span><br><span class="line">v5 = <span class="string">&quot;swdd&quot;</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">331</span>):</span><br><span class="line">        temp = addr+i</span><br><span class="line">        value = idc.get_wide_byte(temp)</span><br><span class="line">        value ^=<span class="built_in">ord</span>(v5[j])</span><br><span class="line">        ida_bytes.patch_byte(temp,value)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;OK&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>得到加密逻辑如下：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004416758-209971143.png" alt="image-20240516004414169"></p>
+<p>exp:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">data = [<span class="number">83</span>,<span class="number">95</span>,<span class="number">86</span>,<span class="number">89</span>,<span class="number">70</span>,<span class="number">79</span>,<span class="number">95</span>,<span class="number">67</span>,<span class="number">71</span>,<span class="number">78</span>,<span class="number">78</span>,<span class="number">95</span>,<span class="number">71</span>,<span class="number">82</span>,<span class="number">75</span>,<span class="number">68</span>,<span class="number">95</span>,<span class="number">75</span>,<span class="number">76</span>,<span class="number">89</span>,<span class="number">69</span>,<span class="number">68</span>,<span class="number">95</span>,<span class="number">73</span>,<span class="number">89</span>,<span class="number">69</span>]<span class="comment">#S_VYFO_CGNN_GRKD_KLYED_IYE</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(data)):</span><br><span class="line">    <span class="keyword">if</span>(data[i]&gt;=<span class="number">65</span> <span class="keyword">and</span> data[i]&lt;=<span class="number">90</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">chr</span>((data[i]-<span class="number">10</span>-<span class="number">65</span>)%<span class="number">26</span>+<span class="number">65</span>),end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">chr</span>(data[i]),end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"><span class="comment">#I_LOVE_SWDD_WHAT_ABOUT_YOU</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="hwanna"><a href="#hwanna" class="headerlink" title="hwanna"></a>hwanna</h3><p>直接看Assembly-CSharp.dll</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516002257085-1091112832.png" alt="image-20240516002252596"></p>
+<p>直接用python跑一下既可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">a</span>(<span class="params"><span class="built_in">input</span>, shift</span>):</span><br><span class="line">    text = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">input</span>:</span><br><span class="line">        <span class="keyword">if</span> c.isalpha():  <span class="comment"># 检查字符是否为字母</span></span><br><span class="line">            <span class="comment"># 使用ord()函数获取字符的ASCII码，然后进行偏移操作，最后使用chr()函数转换回字符</span></span><br><span class="line">            text += <span class="built_in">chr</span>((<span class="built_in">ord</span>(c.lower()) - <span class="built_in">ord</span>(<span class="string">&#x27;a&#x27;</span>) + shift) % <span class="number">26</span> + <span class="built_in">ord</span>(<span class="string">&#x27;a&#x27;</span>)) <span class="keyword">if</span> c.islower() <span class="keyword">else</span> <span class="built_in">chr</span>((<span class="built_in">ord</span>(c.upper()) - <span class="built_in">ord</span>(<span class="string">&#x27;A&#x27;</span>) + shift) % <span class="number">26</span> + <span class="built_in">ord</span>(<span class="string">&#x27;A&#x27;</span>))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            text += c</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line">data = <span class="string">&quot;justaeasyunitygame&quot;</span></span><br><span class="line"></span><br><span class="line">aaa = a(data,<span class="number">5</span>)</span><br><span class="line"><span class="built_in">print</span>(aaa)</span><br><span class="line"><span class="comment">#套上flag头即可H&amp;NCTF&#123;ozxyfjfxdzsnydlfrj&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="childmaze"><a href="#childmaze" class="headerlink" title="childmaze"></a>childmaze</h3><p>一开始用的ida7.5，符号表一直载入不了，f5也看不了，动调也调不起来，纯坐牢了属于是，但看到一堆函数，同时有点混淆的感觉，寻思用d810去去混淆，用ida8.3打开了一下，发现可以正常载入符号表，看出来是rust，动调还是调不起来，难绷，大概逛了一下代码，找到应该是密文</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516002948714-1098707363.png" alt="image-20240516002945995"></p>
+<p>没有逆向逻辑，就是在走完所有地图之后正常解密，用python跑一下直接出了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data = <span class="string">&quot;H&#x27;L@PC&#125;Ci625`hG2]3bZK4&#123;1~&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(data)):</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">chr</span>((<span class="built_in">ord</span>(data[i]))^(i%<span class="number">7</span>)),end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"><span class="comment">#H&amp;NCTF&#123;Ch411enG3_0f_M4z3&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Baby-OBVBS"><a href="#Baby-OBVBS" class="headerlink" title="Baby_OBVBS"></a><strong>Baby_OBVBS</strong></h3><p>查看vbs源码发现是一长串，确定是混淆无疑，execute是执行，即是执行后面这一长段</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004438942-1561112150.png" alt="image-20240516004436789"></p>
+<p>跑起来用ce附加了一下，查找了一下关键字符串”Enter the key:”，发现了真正的代码逻辑：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004546672-523054618.png" alt="image-20240516004544014"></p>
+<p>dump下来之后确认为输入的key做了一个MD5的加密之后判断，然后flag是一个RC4的加密</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004640655-119042299.png" alt="image-20240516004638074"></p>
+<p>而解密的关键是找到MD5的密文和RC4的密文，ANtg和eAqi，显然从dump下来的东西里已然没有这个信息了</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004658781-97328075.png" alt="image-20240516004656266"></p>
+<p>所以还是得从给的vbs脚本入手，执行脚本之后能看到去混淆的代码，所以直接将所需要执行的带混淆的输出一下即可，将原先脚本中开头命令换成 WScript.Echo（vbs里的语法，类似c里面的printf），修改一下保存为vbs，运行并能看到代码逻辑以及需要的密文</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516004738868-1690107087.png" alt="image-20240516004736786"></p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516005145747-598323821.png" alt="image-20240516005142016"></p>
+<p>加密部分还是带了base64加密，正常解码就能看出是MD5和RC4，但现在不用了，直接取开头的两个密文即可，MD5解完之后是<code>H&amp;NKEY</code>，然后直接RC4解就行，找个在线网站解了</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240516005400463-1380820770.png" alt="image-20240516005357675"></p>
+<p><code>H&amp;NCTF&#123;VBS_1s_@_s0_7unny_an4_pow3rfu1_t00l!&#125;</code></p>
+<h3 id="隐藏的眼睛"><a href="#隐藏的眼睛" class="headerlink" title="隐藏的眼睛"></a>隐藏的眼睛</h3><p>比赛时候瞅了一眼，一堆爆红，貌似还是个病毒，解也不多，就没细看，后期复现了一下</p>
+<p>拉进ida全是爆红，有点懵逼，看了wp说是程序大量动态调用与api重写导致ida静态分析函数爆红，眼瞅着下图中一眼有个myDLL，还有一个LocalHide（这个应该就是一个自隐藏，类似删除吧）</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530000438947-619383326.png" alt="image-20240530000433771"></p>
+<p>这块儿应该就是一个检测虚拟环境的部分，启动虚拟环境之后，查看进程就会发现有挂载这些东西，所以这块的作用应该就是检测</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530001026259-438172162.png" alt="image-20240530001025145"></p>
+<p>继续往下逛就是基本每个函数点进去都有爆红，只能随便看看信息了，下面这个好像是检测运行环境的，chat之后的结果是<code>RtlGetVersion</code> 是 Windows 操作系统中一个未公开的函数，属于 Runtime Library (RTL) 部分。这个函数用于获取当前操作系统的版本信息。由于它是未公开的，也就是说它不是 Microsoft 官方文档中明确定义的 API，因此使用它存在一定的风险，比如在未来版本的 Windows 中可能不再支持或者行为发生变化。</p>
+<p>嗯，没啥用</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530001451226-2144095101.png" alt="image-20240530001450379"></p>
+<p>逛一圈只有最后这个函数能进去</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530001630826-370473968.png" alt="image-20240530001629716"></p>
+<p>进去之后有大发现，一眼顶针鉴定为xxtea的shellcode，同时这个程序是没有提示输入之类的，按道理直接把这个过程走一遍就能出，但是动调是过不来这块的</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530001755218-1391186822.png" alt="image-20240530001754306"></p>
+<p>所以这个题的考点感觉还是在过一开始的那个隐藏吧，加载了一个dll声明了LocalHide函数（顾名思义程序的本地隐藏）赋值给了v4，然后作为函数执行</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530002056652-238907132.png" alt="image-20240530002055650"></p>
+<p>倒是第一次知道这种做法，直接拉到dbg里结合ida调试直接就可以过了，基址是对齐的，直接找就行</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530002402983-212840179.png" alt="image-20240530002401789"></p>
+<p>设置完新运行点之后，再找到xxtea完之后的这个函数（感觉是一个check吧），然后断下来直接f9过来就好了</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530002734619-830770876.png" alt="image-20240530002733196"></p>
+<p>xor为check，其中的edx的值是从rdi的地址中取的，内存窗口直接跟过去就可以看到flag了，这种方法我只能说狠狠的学到了</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202405/3445027-20240530003032128-656646520.png" alt="image-20240530003030727"></p>
+<p><code>H&amp;NCTF&#123;0h!!_Y0u_F0UND_MY_1P_ADDRESs&#125;</code></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#24H-N%E9%80%86%E5%90%91%E9%83%A8%E5%88%86wp"><span class="toc-number">1.</span> <span class="toc-text">24H&amp;N逆向部分wp</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E9%80%86%E5%90%91%E9%A2%98"><span class="toc-number">1.0.1.</span> <span class="toc-text">最喜欢的逆向题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DO-YOU-KNOW-SWDD"><span class="toc-number">1.0.2.</span> <span class="toc-text">DO YOU KNOW SWDD?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hwanna"><span class="toc-number">1.0.3.</span> <span class="toc-text">hwanna</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#childmaze"><span class="toc-number">1.0.4.</span> <span class="toc-text">childmaze</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Baby-OBVBS"><span class="toc-number">1.0.5.</span> <span class="toc-text">Baby_OBVBS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E7%9A%84%E7%9C%BC%E7%9D%9B"><span class="toc-number">1.0.6.</span> <span class="toc-text">隐藏的眼睛</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&text=24H&amp;N逆向-WP"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&title=24H&amp;N逆向-WP"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&is_video=false&description=24H&amp;N逆向-WP"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=24H&amp;N逆向-WP&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&title=24H&amp;N逆向-WP"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&title=24H&amp;N逆向-WP"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&title=24H&amp;N逆向-WP"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&title=24H&amp;N逆向-WP"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&name=24H&amp;N逆向-WP&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/&t=24H&amp;N逆向-WP"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    bananaships
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

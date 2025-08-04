@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="DLL基础以及注入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DLL基础以及注入">
+<meta property="og:url" content="https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="黄昏之时.">
+<meta property="og:description" content="DLL基础以及注入">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165736567-122197710.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165736758-1040601863.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165736751-1982066149.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165420498-783117456.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165420157-1189198010.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165619234-1927623490.png">
+<meta property="article:published_time" content="2024-06-06T08:47:18.000Z">
+<meta property="article:modified_time" content="2024-06-06T09:18:41.813Z">
+<meta property="article:author" content="bananaships">
+<meta property="article:tag" content="DLL注入">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165736567-122197710.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>DLL基础以及注入</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/06/06/DLL%E9%9A%90%E8%97%8F%E5%88%9D%E6%8E%A2/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&text=DLL基础以及注入"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&title=DLL基础以及注入"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&is_video=false&description=DLL基础以及注入"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DLL基础以及注入&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&title=DLL基础以及注入"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&title=DLL基础以及注入"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&title=DLL基础以及注入"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&title=DLL基础以及注入"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&name=DLL基础以及注入&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&t=DLL基础以及注入"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DLL%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0"><span class="toc-number">1.</span> <span class="toc-text">DLL基础入门笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01"><span class="toc-number">1.1.</span> <span class="toc-text">0x01</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DLL%EF%BC%88%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%EF%BC%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">DLL（动态链接库）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-API%E5%9F%BA%E7%A1%80%E9%80%9F%E6%88%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">Windows API基础速成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E7%B3%BB%E7%BB%9F%E6%96%87%E4%BB%B6%E5%87%BD%E6%95%B0%E7%9A%84%E6%93%8D%E4%BD%9C%E6%8E%8C%E6%8F%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.3.</span> <span class="toc-text">通过系统文件函数的操作掌握学习方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DLL%E6%96%87%E4%BB%B6%E7%9A%84%E7%BC%96%E5%86%99%E9%80%9F%E6%88%90"><span class="toc-number">1.1.4.</span> <span class="toc-text">DLL文件的编写速成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%EF%BC%88%E7%9B%B8%E5%BD%93%E4%BA%8E%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%8F%A3%EF%BC%89"><span class="toc-number">1.1.5.</span> <span class="toc-text">导出函数（相当于一个接口）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%8E%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%E7%9A%84%E9%9D%99%E6%80%81%E9%80%9A%E8%AE%AF%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.6.</span> <span class="toc-text">应用程序与导出函数的静态通讯方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02"><span class="toc-number">1.2.</span> <span class="toc-text">0x02</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%8EDLL%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%E7%9A%84%E2%80%9C%E5%8A%A8%E6%80%81%E2%80%9D%E9%80%9A%E8%AE%AF%EF%BC%9A"><span class="toc-number">1.2.1.</span> <span class="toc-text">一.应用程序与DLL导出函数的“动态”通讯：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C-%E5%8A%A8%E6%80%81%E8%B0%83%E7%94%A8%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="toc-number">1.2.2.</span> <span class="toc-text">二.动态调用的核心代码：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03"><span class="toc-number">1.3.</span> <span class="toc-text">0x03</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80-%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8%EF%BC%9A"><span class="toc-number">1.3.1.</span> <span class="toc-text">一.导出函数查看工具的使用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C-DLL%E6%B3%A8%E5%85%A5%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">二.DLL注入工具使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%A6%82%E5%BF%B5%EF%BC%9A"><span class="toc-number">1.3.3.</span> <span class="toc-text">三.进程和线程的概念：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B-%E8%BF%9C%E7%A8%8B%E5%8D%B8%E8%BD%BDdll%E6%A8%A1%E5%9D%97%E5%AE%9E%E6%88%98"><span class="toc-number">1.3.4.</span> <span class="toc-text">四.远程卸载dll模块实战</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        DLL基础以及注入
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">bananaships</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-06-06T08:47:18.000Z" class="dt-published" itemprop="datePublished">2024-06-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/DLL%E5%9F%BA%E7%A1%80/">DLL基础</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/DLL%E6%B3%A8%E5%85%A5/" rel="tag">DLL注入</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="DLL基础入门笔记"><a href="#DLL基础入门笔记" class="headerlink" title="DLL基础入门笔记"></a>DLL基础入门笔记</h1><p>​	大一时候写的笔记吧好像是。。。现在回首一看简直就是一坨，放博客里记录一下鼠鼠的阴暗成长史吧。(喜)</p>
+<h2 id="0x01"><a href="#0x01" class="headerlink" title="0x01"></a>0x01</h2><h3 id="DLL（动态链接库）"><a href="#DLL（动态链接库）" class="headerlink" title="DLL（动态链接库）"></a>DLL（动态链接库）</h3><p>1.一般步骤：将<strong>共享DLL文件</strong>感染掉，电脑啥的重启时，所有调用它的都会被感染掉。</p>
+<p>2.注意事项：</p>
+<p>​	DLL模块中包含各种导出函数，用于向外界提供服务，exe。</p>
+<p>​	一个DLL在内存中只有一个实例。</p>
+<p>​	DLL实现了代码的封装性；<strong>编程-&gt;接口</strong></p>
+<p>​	DLL的编制与具体的编程语言及编译器无关。</p>
+<p>​	DLL模块需要的堆栈内存都是从运行进程的堆栈中分配出来的。</p>
+<p>​	DLL函数中的代码所创建的任何对象（包括变量）都归调用它的线程或进程所有。</p>
+<h3 id="Windows-API基础速成"><a href="#Windows-API基础速成" class="headerlink" title="Windows API基础速成"></a>Windows API基础速成</h3><p>1.其中32位Windows操作系统的<strong>编程接口</strong>称为Win32 API</p>
+<p>2.<strong>应用层</strong>编程都是32位的API  而<strong>内核层</strong>才会用到64位的</p>
+<p>3.函数分类：</p>
+<p>​	基本服务（开关机）</p>
+<p>​	组件服务（打开任务管理器即可查看）</p>
+<p>​	用户界面服务（平时编辑的窗口）</p>
+<p>​	图形多媒体服务（听歌，看电影）</p>
+<p>​	消息和协作（发信息，复制，粘贴，剪贴等等）</p>
+<p>​	网络</p>
+<p>​	web服务（网页）</p>
+<h3 id="通过系统文件函数的操作掌握学习方法"><a href="#通过系统文件函数的操作掌握学习方法" class="headerlink" title="通过系统文件函数的操作掌握学习方法"></a>通过系统文件函数的操作掌握学习方法</h3><p>eg. DeleteFileA 是 DeleteFile的净化版本</p>
+<p> 1.可适当取用错误码的返回函数来判断程序的出错原因，对照官网api函数详解。</p>
+<h3 id="DLL文件的编写速成"><a href="#DLL文件的编写速成" class="headerlink" title="DLL文件的编写速成"></a>DLL文件的编写速成</h3><p>①.创建DLL</p>
+<p>​	调用约定：</p>
+<p>​		__stdcall（函数的调用约定 ）</p>
+<p>​		__cdel</p>
+<p>②.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BOOL WINAPI <span class="title function_">DllMain</span><span class="params">( HMODULE hModule,</span></span><br><span class="line"><span class="params">                       DWORD  ul_reason_for_call,</span></span><br><span class="line"><span class="params">                       LPVOID lpReserved</span></span><br><span class="line"><span class="params">                     )</span></span><br></pre></td></tr></table></figure>
+
+<p>​	上面这则代码是<strong>核心的入口函数 DLL文件 动态链接库入口函数</strong></p>
+<p>​	DLL模块的句柄 handle</p>
+<p>​	DLLMain函数被调用的原因</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165736567-122197710.png" alt="image-20231022134247321"></p>
+<p>​	调用原因集合大全：</p>
+<p>​	<img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165736758-1040601863.png" alt="image-20231022134447172"></p>
+<p>​	保留项，也就是Windows的保留参数  <strong>lpReserved</strong></p>
+<p>​	保留参数：不是不使用的参数，而是Windows不想让我们知 道作用的参数</p>
+<p>​	</p>
+<h3 id="导出函数（相当于一个接口）"><a href="#导出函数（相当于一个接口）" class="headerlink" title="导出函数（相当于一个接口）"></a>导出函数（相当于一个接口）</h3><p>1.DLL文件提供接口，前提是DLL文件中有<strong>导出函数</strong>了才能让外部程序实现对于DLL的调用</p>
+<p>2.如果声明没有dllimport或dllexport特性的函数，则该函数不能视为DLL接口的一部分。</p>
+<h3 id="应用程序与导出函数的静态通讯方法"><a href="#应用程序与导出函数的静态通讯方法" class="headerlink" title="应用程序与导出函数的静态通讯方法"></a>应用程序与导出函数的静态通讯方法</h3><p>1.静态库是指在我们的应用中，有一些公共代码是需要反复使用，就把这些代码编译为“库”文件，链接器将从库文件取得所需代码，复制到生成的可执行文件中的这种库。</p>
+<p>2.#pragma comment(lib , “dll”) 注意：没有分号 （函数参数是 后面那个）</p>
+<p>​	注意事项：</p>
+<p>​		extern “C” void 函数名（参数）；注意有分号   &#x2F;&#x2F;防止编译后函数名被篡改或者粉碎 </p>
+<p>​		__declspec(dllexport)：声明导出函数，将该函数从本DLL开放提供给其他应用程序使用</p>
+<p>​		如果没有声明DLLimport或dllexport特性的函数，则该函数不被视为DLL接口的一部分。因此，函数的定义必须存在于该模块或同一程序程序的另一个模块中。<strong>若要使函数成为DLL接口的一部分，必须将其他模块中的函数的定义声明为 dllexport</strong>。 </p>
+<p>​				1.<strong>编译的时候：</strong>编译exe文件的时候必须将所注入的DLL文件复制到exe文件所在的解决方案目录中（如果不详写路径的话）</p>
+<p>​				2.<strong>运行的时候：</strong>不需要lib，只需要dll</p>
+<p>复现成功！</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165736751-1982066149.png" alt="image-20231022144642025"></p>
+<h2 id="0x02"><a href="#0x02" class="headerlink" title="0x02"></a>0x02</h2><h3 id="一-应用程序与DLL导出函数的“动态”通讯："><a href="#一-应用程序与DLL导出函数的“动态”通讯：" class="headerlink" title="一.应用程序与DLL导出函数的“动态”通讯："></a>一.应用程序与DLL导出函数的“动态”通讯：</h3><p>​	静态调用：通过连接器将DLL函数的导出函数写进可执行文件。（见part1中的后面部分）</p>
+<p>​	动态调用：相对于前一种调用属于动态调用，不是在连接时完成的，而是在运行时候完成的。</p>
+<h3 id="二-动态调用的核心代码："><a href="#二-动态调用的核心代码：" class="headerlink" title="二.动态调用的核心代码："></a>二.动态调用的核心代码：</h3><p>此处只需要将原本静态调用下编写的dll文件与新编写的动态调用所生成的exe放在同一文件下即可</p>
+<p>动态调用的详细改写代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="title function_">void</span> <span class="params">(*PMessage_Box)</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//将指定模块</span></span><br><span class="line">	HMODULE hModule = LoadLibrary(<span class="string">&quot;firstDll.dll&quot;</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//判断句柄是否为空</span></span><br><span class="line">	<span class="keyword">if</span> (hModule == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		MessageBox(<span class="literal">NULL</span>, <span class="string">&quot;句柄错误！&quot;</span>, <span class="string">&quot;标题：&quot;</span>, MB_OK);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//从指定的动态链接库（DLL）中检索出的函数 bbb 的地址</span></span><br><span class="line">	PMessage_Box pMsg = (PMessage_Box)GetProcAddress(hModule, <span class="string">&quot;bbb&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//执行函数</span></span><br><span class="line">	pMsg();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>实现截图如下：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165420498-783117456.png" alt="image-20231110195143567"></p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165420157-1189198010.png" alt="image-20231110202121768"></p>
+<p>实现成功</p>
+<h2 id="0x03"><a href="#0x03" class="headerlink" title="0x03"></a>0x03</h2><h3 id="一-导出函数查看工具的使用："><a href="#一-导出函数查看工具的使用：" class="headerlink" title="一.导出函数查看工具的使用："></a>一.导出函数查看工具的使用：</h3><p>​	一键略过，说一下可记知识点：</p>
+<p>​		X86 -&gt; 32位</p>
+<p>​		X64 -&gt; 64位</p>
+<p>​	RVA：RVA是相对虚拟地址（Relative <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Virtual&spm=1001.2101.3001.7020">Virtual</a> Address）的缩写，顾名思义，<strong>它是一个“相对”地址，也可以说是“偏移量”</strong>，PE文件的各种数据结构中涉及到地址的字段大部分都是以RVA表示的。</p>
+<p>​	主要就是查看dll中函数导出的RVA地址</p>
+<h3 id="二-DLL注入工具使用"><a href="#二-DLL注入工具使用" class="headerlink" title="二.DLL注入工具使用"></a>二.DLL注入工具使用</h3><p>​	  使用注入工具的话需要对于原来的dll文件有一个修改</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606165619234-1927623490.png" alt="image-20231110211535157"></p>
+<h3 id="三-进程和线程的概念："><a href="#三-进程和线程的概念：" class="headerlink" title="三.进程和线程的概念："></a>三.进程和线程的概念：</h3><p>​	1.进程，线程，CPU之间的关系就好像车间，车间资源，工厂之间的关系。</p>
+<p>​	2.操作系统的设计可以归结为三点：</p>
+<p>​		（1）.以多进程形式，允许多个任务同时运行；</p>
+<p>​		（2）.以多线程形式，允许单个任务分成不同的部分运行；</p>
+<p>​		（3）.提供协调机制，一方面防止进程之间和线程之间产生冲突，另一方面<strong>允许进程之间和线程之间共享资源。</strong></p>
+<p>​	3.远线程注入：创建一个远程的线程到目标的进程中去执行LoadLibraryA函数，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;iostream&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Inject</span><span class="params">(<span class="type">int</span> pid)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//返回进程的句柄</span></span><br><span class="line">	HANDLE ProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, <span class="literal">NULL</span>, pid);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//加载kernel32.dll模块</span></span><br><span class="line">	HMODULE hModule = GetModuleHandleA(<span class="string">&quot;kernel32.dll&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//获取 dll载入函数的地址</span></span><br><span class="line">	LPTHREAD_START_ROUTINE lpStarAddress = (LPTHREAD_START_ROUTINE)GetProcAddress( hModule,<span class="string">&quot;LoadLibraayA&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//创建远程线程</span></span><br><span class="line">	CreateRemoteThread(ProcessHandle, <span class="literal">NULL</span>, <span class="number">0</span>, lpStarAddress, 内存地址, <span class="number">0</span>, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	4.地址获取；</p>
+<p>​	5.模块擦除：</p>
+<p>​	在调用完一个dll之后，记得用FreeLibrary(“被调用模块的句柄”)擦除一下，如若要加载的应用中存在自动扫描dll，那么这个模块将会暴露，所以要擦除。</p>
+<h3 id="四-远程卸载dll模块实战"><a href="#四-远程卸载dll模块实战" class="headerlink" title="四.远程卸载dll模块实战"></a>四.远程卸载dll模块实战</h3><p>​	废话不多说，直接上代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">Unject</span><span class="params">(<span class="type">int</span> pid)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//返回进程的句柄</span></span><br><span class="line">	HANDLE ProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//创建远程线程														  //FreeLibrary的地址	//要卸载的目标dll地址</span></span><br><span class="line">	HANDLE hThread = CreateRemoteThread(ProcessHandle, <span class="literal">NULL</span>, <span class="number">0</span>, (LPTHREAD_START_ROUTINE)<span class="number">0x76FC8E60</span>, (LPVOID)<span class="number">0x67B30000</span>, <span class="number">0</span>, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//等待线程事件,当调用这个函数时</span></span><br><span class="line">	<span class="comment">// 当前线程会暂停执行，直到所指定的对象变为可用或者信号状态发生变化才会继续执行后面的代码</span></span><br><span class="line">	WaitForSingleObject(hThread, <span class="number">2000</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//防止内存泄露</span></span><br><span class="line">	CloseHandle(hThread);</span><br><span class="line">	CloseHandle(ProcessHandle);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DLL%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0"><span class="toc-number">1.</span> <span class="toc-text">DLL基础入门笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01"><span class="toc-number">1.1.</span> <span class="toc-text">0x01</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DLL%EF%BC%88%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%EF%BC%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">DLL（动态链接库）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-API%E5%9F%BA%E7%A1%80%E9%80%9F%E6%88%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">Windows API基础速成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E7%B3%BB%E7%BB%9F%E6%96%87%E4%BB%B6%E5%87%BD%E6%95%B0%E7%9A%84%E6%93%8D%E4%BD%9C%E6%8E%8C%E6%8F%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.3.</span> <span class="toc-text">通过系统文件函数的操作掌握学习方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DLL%E6%96%87%E4%BB%B6%E7%9A%84%E7%BC%96%E5%86%99%E9%80%9F%E6%88%90"><span class="toc-number">1.1.4.</span> <span class="toc-text">DLL文件的编写速成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%EF%BC%88%E7%9B%B8%E5%BD%93%E4%BA%8E%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%8F%A3%EF%BC%89"><span class="toc-number">1.1.5.</span> <span class="toc-text">导出函数（相当于一个接口）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%8E%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%E7%9A%84%E9%9D%99%E6%80%81%E9%80%9A%E8%AE%AF%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.6.</span> <span class="toc-text">应用程序与导出函数的静态通讯方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02"><span class="toc-number">1.2.</span> <span class="toc-text">0x02</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%8EDLL%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%E7%9A%84%E2%80%9C%E5%8A%A8%E6%80%81%E2%80%9D%E9%80%9A%E8%AE%AF%EF%BC%9A"><span class="toc-number">1.2.1.</span> <span class="toc-text">一.应用程序与DLL导出函数的“动态”通讯：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C-%E5%8A%A8%E6%80%81%E8%B0%83%E7%94%A8%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="toc-number">1.2.2.</span> <span class="toc-text">二.动态调用的核心代码：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03"><span class="toc-number">1.3.</span> <span class="toc-text">0x03</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80-%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8%EF%BC%9A"><span class="toc-number">1.3.1.</span> <span class="toc-text">一.导出函数查看工具的使用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C-DLL%E6%B3%A8%E5%85%A5%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">二.DLL注入工具使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%A6%82%E5%BF%B5%EF%BC%9A"><span class="toc-number">1.3.3.</span> <span class="toc-text">三.进程和线程的概念：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B-%E8%BF%9C%E7%A8%8B%E5%8D%B8%E8%BD%BDdll%E6%A8%A1%E5%9D%97%E5%AE%9E%E6%88%98"><span class="toc-number">1.3.4.</span> <span class="toc-text">四.远程卸载dll模块实战</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&text=DLL基础以及注入"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&title=DLL基础以及注入"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&is_video=false&description=DLL基础以及注入"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DLL基础以及注入&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&title=DLL基础以及注入"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&title=DLL基础以及注入"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&title=DLL基础以及注入"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&title=DLL基础以及注入"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&name=DLL基础以及注入&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/&t=DLL基础以及注入"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    bananaships
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

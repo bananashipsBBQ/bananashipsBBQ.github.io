@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="PE文件架构学习(一)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PE文件架构学习(一)">
+<meta property="og:url" content="https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/index.html">
+<meta property="og:site_name" content="黄昏之时.">
+<meta property="og:description" content="PE文件架构学习(一)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525199-1722741693.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525270-999110570.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525166-118904565.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525522-813963379.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163524602-1702792964.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525154-1510240896.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163524620-700595810.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525088-1677408214.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163524875-1320394236.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525019-716809624.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525260-2029230252.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163524712-1145840193.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525194-2021044649.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525370-1988196134.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525105-101242668.png">
+<meta property="article:published_time" content="2024-06-06T08:33:46.000Z">
+<meta property="article:modified_time" content="2024-07-18T02:13:35.467Z">
+<meta property="article:author" content="bananaships">
+<meta property="article:tag" content="PE">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525199-1722741693.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>PE文件架构学习(一)</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%BA%8C/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&text=PE文件架构学习(一)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&title=PE文件架构学习(一)"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&is_video=false&description=PE文件架构学习(一)"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PE文件架构学习(一)&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&title=PE文件架构学习(一)"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&title=PE文件架构学习(一)"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&title=PE文件架构学习(一)"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&title=PE文件架构学习(一)"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&name=PE文件架构学习(一)&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&t=PE文件架构学习(一)"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PE%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">PE文件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-PE%E6%96%87%E4%BB%B6%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">一.PE文件基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E7%9B%B8%E5%AF%B9%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80"><span class="toc-number">1.2.</span> <span class="toc-text">二.相对虚拟地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E5%88%86%E9%83%A8%E8%A7%A3%E6%9E%90PE%E7%BB%93%E6%9E%84%E7%9A%84%E5%90%84%E4%B8%AA%E9%83%A8%E5%88%86"><span class="toc-number">1.3.</span> <span class="toc-text">三.分部解析PE结构的各个部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80-DOS%E5%A4%B4%E9%83%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">一.DOS头部</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C-PE%E6%96%87%E4%BB%B6%E5%A4%B4"><span class="toc-number">1.3.2.</span> <span class="toc-text">二.PE文件头</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E5%B0%8F%E7%BB%93%EF%BC%9A"><span class="toc-number">1.4.</span> <span class="toc-text">三.小结：</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        PE文件架构学习(一)
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">bananaships</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-06-06T08:33:46.000Z" class="dt-published" itemprop="datePublished">2024-06-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/PE%E7%BB%93%E6%9E%84/">PE结构</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/PE/" rel="tag">PE</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="PE文件结构"><a href="#PE文件结构" class="headerlink" title="PE文件结构"></a>PE文件结构</h1><h2 id="一-PE文件基本概念"><a href="#一-PE文件基本概念" class="headerlink" title="一.PE文件基本概念"></a>一.PE文件基本概念</h2><p>​	PE文件是windows系统中遵循PE结构的文件，比如以.exe .dll .ocx .sys .com为后缀名的文件以及系统驱动文件。<strong>PE文件是微软Windows操作系统上的程序文件</strong>（可能是间接被执行的，如DLL）</p>
+<p>​	官方解释链接 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/win32/debug/pe-format">PE 格式 - Win32 apps | Microsoft Learn</a></p>
+<p>​	顾名思义，世界上各种东西都有自己特定的结构，最简单和直观理解的例子就是我们自己身体的结构，由一个各个部位和器官关节来组成的，而同样的，PE文件也有着它自己所独特的结构。只有有了特定的结构之后，整个文件才能更加有序和规律地去处理代码以及数据，去执行操作等一系列的过程。</p>
+<p>​	PE文件的大致宏观结构图如下：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525199-1722741693.png" alt="image-20240313144242125"></p>
+<p>​	通过上面的图示，我们可以看到一个PE文件的结构大致分为PE文件头、区块数据，（上图紫色部分为PE文件头部分，橙色部分为区块数据部分），PE文件使用的是一个平面地址空间，所有代码和数据都合并在一起，组成了一个很大的结构，区块中包含代码或数据，各个区块按页边界对齐，区块没有大小限制，是一个连续的结构，每个块都有它自己在内存中的一套属性，例如这个块是否包含代码、是否只读或可读&#x2F;写，详细图如下：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525270-999110570.png" alt="image-20240313144801449"></p>
+<p>​	其中核心部分为<strong>PE文件头、区块表、区块</strong>三部分，其中的DOS部首部分是16位程序的一个残留，而如今计算机程序都已经发展到了32位甚至64位，所以DOS部首不咋重要了。</p>
+<p>​	PE文件并非就单放在磁盘中不起作用，都说了是可执行文件，肯定是要被装在到内存当中去执行的，当PE文件被装载到内存当中运行起来的时候，<strong>它会被拉伸</strong>，具体的位置表现在块中，同时磁盘上的数据结构布局和内存中的数据结构布局就是一致的。具体如下图：</p>
+<p>​				<img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525166-118904565.png" alt="image-20240313150148701"></p>
+<p>​	而当这个PE文件被运行起来之后就会被叫做<strong>模块(Module)<strong>，映射文件的起始地址称为</strong>模块句柄</strong>，也叫做基地址。在32位的Windows系统中可以直接调用 GetModuleHandle  的api以取得指向模块的指针，通过该指针直接访问该模块的内容。该函数结构如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">HMODULE <span class="title">GetModuleHandleA</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">  [in, optional] LPCSTR lpModuleName</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>​	调用该函数时所需的参数是一个可执行文件或者是DLL文件名字符串，如果系统找到了文件，则会返回该可执行文件或DLL文件映像所加载的基地址。（指定路径时，请务必使用反斜杠 \ ，而不是使用 &#x2F;），如果该函数成功，则返回值是指定模块的句柄，失败则返回NULL。</p>
+<h2 id="二-相对虚拟地址"><a href="#二-相对虚拟地址" class="headerlink" title="二.相对虚拟地址"></a>二.相对虚拟地址</h2><p>​	在windows系统中，PE文件被系统加载器映射到内存中，每个程序都有自己的虚拟空间，这个虚拟空间的内存地址称为<strong>虚拟地址(VA)<strong>，EXE默认的加载基址是400000h,DLL文件默认基址是10000000h。需要注意的是基地址不是程序的入口点。 为了避免在PE文件中出现绝对内存中的地址所以引入了</strong>相对虚拟地址（RVA）</strong>的概念。RVA只是内存中的一个简单的相对于PE文件载入地址的<strong>偏移位置</strong>，而在winodws系统当中，每个系统版本的偏移量都有可能不同。例如，假设一个EXE文件从400000h处载入，而且它的代码区块开始于401000h处，故代码区块的RVA计算方法如下：<br>$$<br>目标地址  401000h - 载入地址  400000h  &#x3D; 相对虚拟地址 1000h<br>$$<br>​	而将一个RVA转换成真实的地址只是简单地翻转一下上述过程，即用实际的载入地址加上RVA，得到实际的内存地址，他们之间的关系如下：<br>$$<br>虚拟地址（VA） &#x3D;  基地址（ImageBase） + 相对虚拟地址（RVA）<br>$$<br>​	**入口点(OEP)**：首先明确一个概念就是OEP是一个RVA，然后使用OEP +Imagebase &#x3D;&#x3D;入口点的VA，通常情况下，OEP指向的不是main函数。</p>
+<p>​	文件偏移地址(FOA)：当PE文件储存在某个磁盘当中的时候，某个数据的位置相对于文件头的偏移量。</p>
+<h2 id="三-分部解析PE结构的各个部分"><a href="#三-分部解析PE结构的各个部分" class="headerlink" title="三.分部解析PE结构的各个部分"></a>三.分部解析PE结构的各个部分</h2><p>先用一张图来概括一下各个部分的关系：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525522-813963379.png" alt="image-20240313211740499"></p>
+<h3 id="一-DOS头部"><a href="#一-DOS头部" class="headerlink" title="一.DOS头部"></a>一.DOS头部</h3><p>​	DOS系统是相当古老的，是一个16位的操作系统（现在windows环境下的命令提示符窗口用的就是DOS的界面），前言是微软当时在设计PE文件的时候目的是为了让其兼容区间更大，兼容除了向上兼容以外还有向下兼容的需求。因此，为了能够兼容16位程序的运行，PE文件格式在设计的时候，设计了MS-DOS头部，它位于PE文件架构的最头部位置，有了它，一但程序在DOS下执行，DOS就能识别出这是一个有效的执行体。</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163524602-1702792964.png" alt="image-20240313204859930"></p>
+<p>​	而DOS头又称之为DOS部首，由 DOS stub 和 DOS ‘MZ’ HEADER两部分组成。DOS头结构图如下：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525154-1510240896.png" alt="image-20240313205237914"></p>
+<p>​	上图标红的两个部分尤为重要，其余部分在初步学习中可以忽略不计，分别是 <strong>e_magic 和 e_lfanew</strong>，e_magic 字段（一个字大小）的值需要被设置为5A4Dh，在ASCII表示法里它的ASCII值为“MZ”，是MS-DOS的创建者之一的名字缩写，而 e_lfanew 字段是真正的PE文件头的相对偏移（RVA），<strong>其指出了真正的PE头的文件偏移位置</strong>，占用<strong>四字节</strong>，<strong>其位于从文件开始的3Ch字节处</strong>。</p>
+<p>​	下面用010（16进制编辑器）查看一下一个exe示例：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163524620-700595810.png" alt="image-20240313210846935"></p>
+<p>​	上图中E8至50之间的杂七杂八的是DOS头的一个残留，它们组成了DOS stub这个部分，其中还存了一个错误提示，是为16位的程序准备的，所以可以不用理会，可以直接在010中清除掉，我们的原程序运行也不会受影响。</p>
+<h3 id="二-PE文件头"><a href="#二-PE文件头" class="headerlink" title="二.PE文件头"></a>二.PE文件头</h3><p>​	紧跟着DOS stub 的是PE文件头（PE Header）。“PE Header”是PE相关结构的NT映像头（IMAGE_NT_HEADERS）的简称，（NT操作系统在windows操作系统的发展当中是相当重要的一个环节），其中包含许多PE装载器都能用到的重要字段。实际上有两个版本的IMAGE_NT_HEADER结构一个是为PE32（32位版本）可执行文件准备的，另一个是PE32+（64位版本），但二者几乎没有区别。当执行体在支持PE文件结构的操作系统中执行时，PE装载器将从上一DOS部分中的IMAGE_DOS_HEADER结构的 e_lfanew 字段中找到PE Header的起始偏移量，<strong>用其加上基址</strong>便得到了PE文件头的指针，如上图中的箭头所示。公式如下：<br>$$<br>PNTHeader &#x3D; ImageBase + dosHeader -&gt; e.lfanew<br>$$<br>​	PE文件头由三个部分组成，下图是IMAGE_NT_HEADER64的结构，左边的数字是到PE文件头的偏移量，而第一个字段singnature即是PE文件的标识。所以下文分为三个部分开讲。</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525088-1677408214.png" alt="image-20240314192614476"></p>
+<p>一.Signature和第二大部分DOS头中的DOS-MZ的作用差不多，都是作为一个标记，且被填充为0x00004550，ASCII码中即为PE，DOS部分中的IMAGE_DOS_HEADER结构的  e_lfanew 字段正是指向“PE\0\0”。（具体请见上面第二幅图中）</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163524875-1320394236.png" alt="image-20240314192009862"></p>
+<p>二.映像文件头 IMAGE_FILE_HEADER 结构如下：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525019-716809624.png" alt="image-20240314194049365"></p>
+<p>​	上图中包含了PE文件的一些基本信息，最重要的是<strong>其中一个域指出了 IMAGE_OPTIONAL_HEADER的大小</strong>，上图左侧的偏移量是基于PE文件头（IMAGE_NT_HEADERS）的。下图给出一个示例（使用studyPE查看，该工具会在文末给出）：左图是从010中查看的，右图是StudyPE中查看的</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525260-2029230252.png" alt="image-20240314205957073"></p>
+<p>​	</p>
+<p>​				<img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163524712-1145840193.png" alt="image-20240314210823907">	</p>
+<p>​	</p>
+<p>​	1.Machine：可执行文件的目标CPU类型，不同平台的机器码不同。</p>
+<p>​	2.NumberOfSections：区块的数目，也就是节表数，即上图中的0C。</p>
+<p>​	3.TimeDateStamp：表示文件的创建时间。</p>
+<p>三.可选映像头 IMAGE_OPTIONAL_HEADER </p>
+<p>​	IMAGE_OPTIONAL_HEADER（可选映像头）是一个可选的机构，实际上 IMAGE_FILE_HEADER 结构不足以定义PE文件属性，因此可选映像头中定义了更多的数据。已知NT头开始处加14h处是文件属性的大小图中为E0，且蓝色区块即为文件属性全部内容，从NT头处加16h（切记是16进制数，对应到10进制的话往后数22位即可）即是文件属性的开始，如下图：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525194-2021044649.png" alt="image-20240314214400489"></p>
+<p>​	下图是 IMAGE_OPTIONAL_HEADER 结构图，左边对应的是其偏移量：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525370-1988196134.png" alt="image-20240314214651235"></p>
+<p>​	感兴趣的师傅可以对照上表去研究一下。</p>
+<h2 id="三-小结："><a href="#三-小结：" class="headerlink" title="三.小结："></a>三.小结：</h2><p>​	本篇大概论述了PE文件中的DOS头和PE头的基本结构，如有错误还请师傅们指正，最后贴出一个宏观查看PE整个结构的工具<strong>OpenArk</strong>，以及文中所使用到的工具PEstudy的下载链接，有需要的师傅自取。</p>
+<p>​	<a target="_blank" rel="noopener" href="https://wwz.lanzouj.com/b05l2evti">https://wwz.lanzouj.com/b05l2evti</a>    密码:99ax</p>
+<p>​	OpenArk的使用截图如下，将选项卡选择到红框处即可拖拽使用：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606163525105-101242668.png" alt="image-20240314215704091"></p>
+<p>​	</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PE%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">PE文件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-PE%E6%96%87%E4%BB%B6%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">一.PE文件基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E7%9B%B8%E5%AF%B9%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80"><span class="toc-number">1.2.</span> <span class="toc-text">二.相对虚拟地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E5%88%86%E9%83%A8%E8%A7%A3%E6%9E%90PE%E7%BB%93%E6%9E%84%E7%9A%84%E5%90%84%E4%B8%AA%E9%83%A8%E5%88%86"><span class="toc-number">1.3.</span> <span class="toc-text">三.分部解析PE结构的各个部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80-DOS%E5%A4%B4%E9%83%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">一.DOS头部</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C-PE%E6%96%87%E4%BB%B6%E5%A4%B4"><span class="toc-number">1.3.2.</span> <span class="toc-text">二.PE文件头</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E5%B0%8F%E7%BB%93%EF%BC%9A"><span class="toc-number">1.4.</span> <span class="toc-text">三.小结：</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&text=PE文件架构学习(一)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&title=PE文件架构学习(一)"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&is_video=false&description=PE文件架构学习(一)"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PE文件架构学习(一)&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&title=PE文件架构学习(一)"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&title=PE文件架构学习(一)"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&title=PE文件架构学习(一)"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&title=PE文件架构学习(一)"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&name=PE文件架构学习(一)&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/&t=PE文件架构学习(一)"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    bananaships
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="win内核初探-断链隐藏进程及恢复">
+<meta property="og:type" content="article">
+<meta property="og:title" content="断链隐藏进程及恢复（附代码）">
+<meta property="og:url" content="https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/index.html">
+<meta property="og:site_name" content="黄昏之时.">
+<meta property="og:description" content="win内核初探-断链隐藏进程及恢复">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757432-543074220.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757064-755237795.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757106-1026019809.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757501-679608383.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757420-2043512384.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757557-1442031848.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757449-1937310107.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757327-1004197475.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757432-1952939439.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757333-195509647.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757313-341192144.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757024-251935355.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757459-1116328335.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757527-1146679691.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757032-1764610746.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757125-122055031.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757186-1841452294.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757420-1088549092.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757357-638209488.png">
+<meta property="article:published_time" content="2024-06-06T08:27:07.000Z">
+<meta property="article:modified_time" content="2024-06-06T09:18:41.820Z">
+<meta property="article:author" content="bananaships">
+<meta property="article:tag" content="Kernel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757432-543074220.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>断链隐藏进程及恢复（附代码）</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%B8%80/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/06/06/2024VCTF-WP/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&text=断链隐藏进程及恢复（附代码）"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&title=断链隐藏进程及恢复（附代码）"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&is_video=false&description=断链隐藏进程及恢复（附代码）"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=断链隐藏进程及恢复（附代码）&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&title=断链隐藏进程及恢复（附代码）"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&title=断链隐藏进程及恢复（附代码）"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&title=断链隐藏进程及恢复（附代码）"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&title=断链隐藏进程及恢复（附代码）"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&name=断链隐藏进程及恢复（附代码）&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&t=断链隐藏进程及恢复（附代码）"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">断链隐藏进程及恢复（附代码）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%89%8D%E8%A8%80%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">一.前言：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E8%B8%A9%E5%9D%91%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">二.踩坑：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E6%AD%A3%E6%96%87%E5%BC%80%E5%A7%8B"><span class="toc-number">1.3.</span> <span class="toc-text">三.正文开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%A5%E9%87%8D%E9%94%99%E8%AF%AF%E5%89%96%E6%9E%90"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.严重错误剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%AD%A3%E6%96%87%E5%BC%80%E5%A7%8B"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.真正的正文开始</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        断链隐藏进程及恢复（附代码）
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">bananaships</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-06-06T08:27:07.000Z" class="dt-published" itemprop="datePublished">2024-06-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Windows%E5%86%85%E6%A0%B8/">Windows内核</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Kernel/" rel="tag">Kernel</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="断链隐藏进程及恢复（附代码）"><a href="#断链隐藏进程及恢复（附代码）" class="headerlink" title="断链隐藏进程及恢复（附代码）"></a>断链隐藏进程及恢复（附代码）</h1><h2 id="一-前言："><a href="#一-前言：" class="headerlink" title="一.前言："></a>一.前言：</h2><p>​	继Strider上次问了我如何隐藏一个进程之后，这周仔细研究了一下，首先去了解了一下隐藏进程的各种方法，其实有很多方法很多也很杂，然后有些隐藏只是能躲过任务管理器还有ntdll里面ZwQuerySystemInformation函数（枚举进程的函数），然后通过一些暴力的枚举方法还是会露馅，就总结一些常见的吧：</p>
+<p>​	1.比较简单的即是内核中映射的进程列表进行断链操作，此处是一个双链表（后文会详细赘述）</p>
+<p>​	2.其次就是修改内核映射中的EPROCESS中对应的pid，也能实现隐藏</p>
+<p>​	3.然后就是对于DriveObject信息的抹除（没看懂，系统学内核了再复现）</p>
+<p>而本文也是就第一种方法展开复现，来进行进程的隐藏。</p>
+<h2 id="二-踩坑："><a href="#二-踩坑：" class="headerlink" title="二.踩坑："></a>二.踩坑：</h2><p>​	首先，我们知道，进程体EPROCESS是被系统维护在一个<strong>双向链表LIST_ENTRY</strong>中的，那么，我们只要把进程的EPROCESS从这个链表中摘除，就可以实现进程隐藏了，当然，这只能瞒过进程管理器和ntdll中的zwQuerySystemInformation，暴力枚举依旧可以发现断链隐藏的进程，因为进程体还在内存中。</p>
+<p>​	然后开始进行断链操作，借助windbg实现操作，一直在纠结一个问题就是能否在自己的本机上调试本机的内核，然后问了一下鹏哥，确实是可以的，然后就有点踩坑地开始复现了，网上很多关于windbg使用的教学都是老版本的，然后微软好像22年就开始禁用了离线符号包的下载使用了，我在本机上下载了老版本的windbg，在配置符号文件的时候一直卡着过不去。</p>
+<p>​	一开始使用的时候，先附加了需要隐藏的一个进程，输入命令<code>dt _eprocess</code>，一开始看到了eprocess 的结构，没意识到犯了<strong>很严重的错误</strong>（后续文章中会讲述）。</p>
+<p>​	<img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757432-543074220.png" alt="image-20240420193537445"></p>
+<p>​	</p>
+<p>​	直到后面查看内核映射中的进程列表信息的时候才意识到有点蠢，继续输入命令<code>! process 0 0</code>，开始出现最头疼的报错了</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757064-755237795.png" alt="image-20240420194030938"></p>
+<p>​	然后一直搜一直搜，搜到了问题是得修复一下ntdll的符号文件，然后这个符号文件一般是可以进行离线下载的，但是按照网上说的设置符号下载位置的方法<code>srv*yourpath*http://msdl.microsoft.com/download/symbols</code>，设置完成之后我们重启计算机，用windbg 附加一个进程来下载符号，然后<strong>还是不太好使！</strong></p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757106-1026019809.png" alt="image-20240420194800419"></p>
+<p>​	然后我就搜到了这个。。。	</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757501-679608383.png" alt="image-20240420194948859"></p>
+<p>​	不甘心没有，然后进了上述命令中的<a target="_blank" rel="noopener" href="http://msdl.microsoft.com/download/symbols%E5%9C%B0%E5%9D%80%E4%B8%80%E6%8E%A2%E7%A9%B6%E7%AB%9F%EF%BC%8C%E7%84%B6%E5%90%8E%E6%88%91%E5%B0%B1%E6%94%BE%E5%BC%83%E4%BA%86%E3%80%82%E3%80%82%E3%80%82">http://msdl.microsoft.com/download/symbols地址一探究竟，然后我就放弃了。。。</a></p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757420-2043512384.png" alt="image-20240420195220939"></p>
+<p>​	遇到困难了，由于辉哥这两天比较忙，所以求助了一下鹏哥，由于鹏哥之前是在XP上使用的windbg，然后就得到了鹏哥XP的克隆（真香），同时也得到了一份老版windbg的32位和64位安装包，以及最最重要的符号文件！！！</p>
+<h2 id="三-正文开始"><a href="#三-正文开始" class="headerlink" title="三.正文开始"></a>三.正文开始</h2><h3 id="1-严重错误剖析"><a href="#1-严重错误剖析" class="headerlink" title="1.严重错误剖析"></a>1.严重错误剖析</h3><p>​	开始在XP上进行实验，正常的安装windbg和下载符号文件（打包成exe太爽了）之后，开始进行调试。</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757557-1442031848.png" alt="image-20240420200209949"></p>
+<p>​	？！woc，换了个方式又报了个错，然后搜了一下，感觉有被自己蠢到，发现了上文中所说的<strong>严重错误</strong>，体会到了再没熟悉windbg使用就瞎敲命令的下场：</p>
+<p>​	windbg命令分为标准命令（40个左右），元命令（一百多个）和扩展命令。</p>
+<p>​	标准命令提供最基本的调试功能，不区分大小写。如：bp g dt dv k等<br>​	元命令提供标准命令没有提供的功能，也内建在调试引擎中，以.开头。如.sympath .reload等<br>​	扩展命令用于扩展某一方面的调试功能，实现在动态加载的扩展模块中，以!开头。如!analyze等</p>
+<p>​	每个调试命令都各有使用范围，有些命令只能用于内核调试，有些命令只能用于用户调试，有些命令只能用于活动调试。但用户也不必记得这许多，一旦在某个环境下，使用了不被支持的命令，都会显示“No export XXX found”的字样。就拿!process命令来说吧，<strong>它显示进程信息，但只能用于内核调试中，如果在用户调试中使用</strong>，就是下面的情景：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0:001&gt; ! process 0 0</span><br><span class="line">No export process found</span><br></pre></td></tr></table></figure>
+
+<p>​	所以，在使用windbg进行调试的时候，一定要搞清楚你是在那种模式下进行调试，还是那句老话，在使用之前，你要清楚你自己在干什么。关闭windbg之后，重新启动并切换windbg模式至内核debug</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757449-1937310107.png" alt="image-20240420201201218"></p>
+<p>​	选至本地：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757327-1004197475.png" alt="image-20240420201230115"></p>
+<p>然后你就会惊奇的发现左下角的开头变了：（lkd也算是内核调试的标志了）</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757432-1952939439.png" alt="image-20240420201313339"></p>
+<p>输入命令<code>! process 0 0</code>，即可看到进程列表</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757333-195509647.png" alt="image-20240420201631737"></p>
+<h3 id="2-真正的正文开始"><a href="#2-真正的正文开始" class="headerlink" title="2.真正的正文开始"></a>2.真正的正文开始</h3><p>首先我们遇到两个问题：</p>
+<p>1.既然要遍历链表，我们就要知道每个结构的前后结构；</p>
+<p>2.既然要对比进程名，我们就要知道进程名放在哪个地方；</p>
+<p>先查看一手该版本系统下的eporcess结构体中各项数值的偏移量（基于windows的版本不同各有偏差，并不唯一）</p>
+<p>​	输入命令<code>dt _eprocess</code>，主要查看下图中标记的两处位置的偏移量</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757313-341192144.png" alt="image-20240420202735543"></p>
+<p>（1）. ActiveProcessLinks</p>
+<p>​	EPROCESS块中有一个ActiveProcessLinks成员，它是一个PLIST_ENTRY结构的<strong>双向链表</strong>。当一个新进程建立的时候父进程负责完成EPROCESS块，然后把ActiveProcessLinks链接到一个全局内核变量PsActiveProcessHead链表中。(可以看成双链表中的一个节点地址，而此节点中分别存储的是该进程在链表中的上下进程的指针地址)</p>
+<p>​	紧接着输入命令<code>dt _LIST_ENTRY</code>，查看LIST_ENTRY的结构</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757024-251935355.png" alt="image-20240420203819388"></p>
+<p>​	可以看到变量FLink和BLink，FLink指向当前节点的后一个节点的ActiveProcessLinks地址，BLink指向当前结点的前一个节点的ActiveProcessLinks地址，这块儿的两个地址一定别记反，后面即是通过他们来找到锁定进程的上下进程的。</p>
+<p>（2）.ImageFileName</p>
+<p>​	在上上图中，我们可以看到在偏移0x174处，出现了ImageFileName，这里存的就是<strong>我们要找的进程名</strong>。</p>
+<p>​	接着再输入一遍命令<code>! process 0 0</code>，随便选择一个进程，这里选择 vmtoolsd.exe，注意记住它的上下邻接进程</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757459-1116328335.png" alt="image-20240420204510507"></p>
+<p>​	然后查看该进程的eprocess，输入命令<code>dt _eprocess 85f5ab28</code>,可看出 ActiveProcessLinks 处由两个数值相减，相比他们就是上文中提到的变量FLink和BLink吧，然后反复思考，一个进程的ActiveProcessLinks由两个变量组成，双指针，那尾减去头一定就是本身的地址了。故下图中0x85f42e28应该是BLink，而0x85f34ca0也就是FLink，分别指向当前结点的前后两个节点的ActiveProcessLinks地址。</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757527-1146679691.png" alt="image-20240420204947114"></p>
+<p>​	OK，那么事情已经明了了，进程被映射到内核之中后被列举成了这一串双链表，而我们只需要摘除掉其中的那个目标就行，也就是说需要通过检索到的目标进程之后，通过它的eprocess中的ActiveProcessLinks进而实现断链操作，所以我们现在要做的就是通过ActiveProcessLinks中存储的两个值，访问到应该在进程链表中排与目标进程前后的两个进程的eprocess。</p>
+<p>​	1.按着上图中的例子走，先试着访问一手目标进程后面的进程是啥，输入命令<code>dd 0x85f34ca0</code>，查看地址0x85f34ca0中的内容</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757032-1764610746.png" alt="image-20240420210418864"></p>
+<p>​	已知0x85f34ca0中存储的是指向目标进程的下一个进程的ActiveProcessLinks信息，再由上文中总结出来的“后减前原则”，故可知</p>
+<p>85f3b688中存储的是后一个进程再后一个进程的ActiveProcessLinks，而85f5abb0中存储的是前一个进程（此时也就是我们的目标进程的ActiveProcessLinks），不信可以输入命令<code>dd 0x85f5abb0</code>进行如下验证：（对照上上图中目标进程的ActiveProcessLinks的值即可）</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757125-122055031.png" alt="image-20240420211025654"></p>
+<p>​	注意，因为FLink指向当前节点的后一个节点的ActiveProcessLinks地址，所以后一个节点的EPROCESS地址为ActiveProcessLinks地址中的（0x85f34ca0）减去偏移0x88，成功。</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757186-1841452294.png" alt="image-20240420212657461"></p>
+<p>​	2.同理，这块采用比较笨的方法进行运算，因为我对地址偏移的操作还不太那么熟悉，那么我只要拿到了目标进程中指向前一个进程ActiveProcessLinks的地址，然后输入命令<code>dd 0x85f42e28</code>，再拿出前一个进程中指向再前一个进程的ActiveProcessLinks的地址中的指向后一个进程的FLink，在用这个Flink地址-0x88，故可得到结果：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757420-1088549092.png" alt="image-20240420213608682"></p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606162757357-638209488.png" alt="image-20240420213639665"></p>
+<p>​	</p>
+<p>综上所述，我们已经由已知的目标进程求出了起前后两个进程的eprocess，接下来直接进行断链操作即可，然后实现对于进程的隐藏，贴出大佬的脚本如下：（我还没写过驱动程序，所以脚本的复现还没进行，不过指日可待）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> CXX_HIDEPROCESS_H</span></span><br><span class="line"><span class="meta">#    <span class="keyword">include</span> <span class="string">&quot;HideProcess.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ULONG_PTR ActiveOffsetPre =  <span class="number">0</span>;</span><br><span class="line">ULONG_PTR ActiveOffsetNext = <span class="number">0</span>;</span><br><span class="line">ULONG_PTR ImageName = <span class="number">0</span>;</span><br><span class="line">WIN_VERSION WinVersion = WINDOWS_UNKNOW;</span><br><span class="line"></span><br><span class="line">PLIST_ENTRY Temp = <span class="literal">NULL</span>;</span><br><span class="line">PLIST_ENTRY HeadEntry = <span class="literal">NULL</span>;</span><br><span class="line">NTSTATUS</span><br><span class="line">    <span class="title function_">DriverEntry</span><span class="params">(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegisterPath)</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    DbgPrint(<span class="string">&quot;DriverEntry\r\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    DriverObject-&gt;DriverUnload = UnloadDriver;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    WinVersion = GetWindowsVersion();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span>(WinVersion)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> WINDOWS_XP:   <span class="comment">//32Bits</span></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            ActiveOffsetPre =  <span class="number">0x8c</span>;</span><br><span class="line">            ActiveOffsetNext = <span class="number">0x88</span>;</span><br><span class="line">            ImageName = <span class="number">0x174</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">case</span> WINDOWS_7:   <span class="comment">//64Bits</span></span><br><span class="line">        &#123;</span><br><span class="line">            ActiveOffsetPre =  <span class="number">0x190</span>;</span><br><span class="line">            ActiveOffsetNext = <span class="number">0x188</span>;</span><br><span class="line">            ImageName = <span class="number">0x2e0</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    HideProcess(<span class="string">&quot;notepad.exe&quot;</span>);</span><br><span class="line"></span><br><span class="line">    HeadEntry = (PLIST_ENTRY)((ULONG_PTR)PsGetCurrentProcess()+ActiveOffsetNext);<span class="comment">// 在DriverEntry中执行得到的才是System进程</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> STATUS_SUCCESS;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">VOID <span class="title function_">HideProcess</span><span class="params">(<span class="type">char</span>* ProcessName)</span></span><br><span class="line">&#123;</span><br><span class="line">    PEPROCESS EProcessCurrent = <span class="literal">NULL</span>;</span><br><span class="line">    PEPROCESS EProcessPre = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    EProcessCurrent = PsGetCurrentProcess();    <span class="comment">//System  EProcess</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    EProcessPre = (PEPROCESS)((ULONG_PTR)(*((ULONG_PTR*)((ULONG_PTR)EProcessCurrent+ActiveOffsetPre)))-ActiveOffsetNext);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//DbgPrint(&quot;EProcessCurrent: 0x%p\r\n&quot;,EProcessCurrent);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//DbgPrint(&quot;EProcessNext: 0x%p\r\n&quot;,EProcessNext);</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (EProcessCurrent!=EProcessPre)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//    DbgPrint(&quot;%s\r\n&quot;,(char*)((ULONG_PTR)EProcessCurrent+ImageName));</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">strcmp</span>((<span class="type">char</span>*)((ULONG_PTR)EProcessCurrent+ImageName),ProcessName)==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            Temp = (PLIST_ENTRY)((ULONG_PTR)EProcessCurrent+ActiveOffsetNext);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (MmIsAddressValid(Temp))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//    Temp-&gt;Blink-&gt;Flink = Temp-&gt;Flink;</span></span><br><span class="line">                <span class="comment">//    Temp-&gt;Flink-&gt;Blink = Temp-&gt;Blink;   //数据结构  不稳定</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                RemoveEntryList(Temp);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        EProcessCurrent = (PEPROCESS)((ULONG_PTR)(*((ULONG_PTR*)((ULONG_PTR)EProcessCurrent+ActiveOffsetNext)))-ActiveOffsetNext);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">VOID <span class="title function_">UnloadDriver</span><span class="params">(PDRIVER_OBJECT  DriverObject)</span></span><br><span class="line">&#123;</span><br><span class="line">    ResumeProcess();</span><br><span class="line">    DbgPrint(<span class="string">&quot;UnloadDriver\r\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">VOID <span class="title function_">ResumeProcess</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(Temp!=<span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        InsertHeadList(HeadEntry,Temp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">WIN_VERSION <span class="title function_">GetWindowsVersion</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    RTL_OSVERSIONINFOEXW osverInfo = &#123;<span class="keyword">sizeof</span>(osverInfo)&#125;;</span><br><span class="line">    pfnRtlGetVersion RtlGetVersion = <span class="literal">NULL</span>;</span><br><span class="line">    WIN_VERSION WinVersion;</span><br><span class="line">    WCHAR wzRtlGetVersion[] = <span class="string">L&quot;RtlGetVersion&quot;</span>;</span><br><span class="line"></span><br><span class="line">    RtlGetVersion = GetFunctionAddressByName(wzRtlGetVersion);    <span class="comment">//Ntoskrnl.exe  导出表</span></span><br><span class="line">    <span class="keyword">if</span> (RtlGetVersion)</span><br><span class="line">    &#123;</span><br><span class="line">        RtlGetVersion((PRTL_OSVERSIONINFOW)&amp;osverInfo);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        PsGetVersion(&amp;osverInfo.dwMajorVersion, &amp;osverInfo.dwMinorVersion, &amp;osverInfo.dwBuildNumber, <span class="literal">NULL</span>);   <span class="comment">//Documet</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    DbgPrint(<span class="string">&quot;Build Number: %d\r\n&quot;</span>, osverInfo.dwBuildNumber);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (osverInfo.dwMajorVersion == <span class="number">5</span> &amp;&amp; osverInfo.dwMinorVersion == <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        DbgPrint(<span class="string">&quot;WINDOWS_XP\r\n&quot;</span>);</span><br><span class="line">        WinVersion = WINDOWS_XP;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (osverInfo.dwMajorVersion == <span class="number">6</span> &amp;&amp; osverInfo.dwMinorVersion == <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        DbgPrint(<span class="string">&quot;WINDOWS 7\r\n&quot;</span>);</span><br><span class="line">        WinVersion = WINDOWS_7;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (osverInfo.dwMajorVersion == <span class="number">6</span> &amp;&amp;</span><br><span class="line">        osverInfo.dwMinorVersion == <span class="number">2</span> &amp;&amp;</span><br><span class="line">        osverInfo.dwBuildNumber == <span class="number">9200</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        DbgPrint(<span class="string">&quot;WINDOWS 8\r\n&quot;</span>);</span><br><span class="line">        WinVersion = WINDOWS_8;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (osverInfo.dwMajorVersion == <span class="number">6</span> &amp;&amp;</span><br><span class="line">        osverInfo.dwMinorVersion == <span class="number">3</span> &amp;&amp;</span><br><span class="line">        osverInfo.dwBuildNumber == <span class="number">9600</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        DbgPrint(<span class="string">&quot;WINDOWS 8.1\r\n&quot;</span>);</span><br><span class="line">        WinVersion = WINDOWS_8_1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        DbgPrint(<span class="string">&quot;WINDOWS_UNKNOW\r\n&quot;</span>);</span><br><span class="line">        WinVersion = WINDOWS_UNKNOW;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> WinVersion;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PVOID</span><br><span class="line">    <span class="title function_">GetFunctionAddressByName</span><span class="params">(WCHAR *wzFunction)</span></span><br><span class="line">&#123;</span><br><span class="line">    UNICODE_STRING uniFunction;</span><br><span class="line">    PVOID AddrBase = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (wzFunction &amp;&amp; wcslen(wzFunction) &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        RtlInitUnicodeString(&amp;uniFunction, wzFunction);      <span class="comment">//常量指针</span></span><br><span class="line">        AddrBase = MmGetSystemRoutineAddress(&amp;uniFunction);  <span class="comment">//在System 进程  第一个模块  Ntosknrl.exe  ExportTable</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> AddrBase;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">断链隐藏进程及恢复（附代码）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%89%8D%E8%A8%80%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">一.前言：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E8%B8%A9%E5%9D%91%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">二.踩坑：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E6%AD%A3%E6%96%87%E5%BC%80%E5%A7%8B"><span class="toc-number">1.3.</span> <span class="toc-text">三.正文开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%A5%E9%87%8D%E9%94%99%E8%AF%AF%E5%89%96%E6%9E%90"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.严重错误剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%AD%A3%E6%96%87%E5%BC%80%E5%A7%8B"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.真正的正文开始</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&text=断链隐藏进程及恢复（附代码）"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&title=断链隐藏进程及恢复（附代码）"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&is_video=false&description=断链隐藏进程及恢复（附代码）"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=断链隐藏进程及恢复（附代码）&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&title=断链隐藏进程及恢复（附代码）"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&title=断链隐藏进程及恢复（附代码）"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&title=断链隐藏进程及恢复（附代码）"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&title=断链隐藏进程及恢复（附代码）"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&name=断链隐藏进程及恢复（附代码）&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/%E6%96%AD%E9%93%BE%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%8F%8A%E6%81%A2%E5%A4%8D%EF%BC%88%E9%99%84%E4%BB%A3%E7%A0%81%EF%BC%89/&t=断链隐藏进程及恢复（附代码）"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    bananaships
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

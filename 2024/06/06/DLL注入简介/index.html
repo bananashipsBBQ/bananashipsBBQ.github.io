@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="DLL注入技术简介">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DLL注入技术简介">
+<meta property="og:url" content="https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="黄昏之时.">
+<meta property="og:description" content="DLL注入技术简介">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606170734984-1603617283.png">
+<meta property="article:published_time" content="2024-06-06T09:07:27.000Z">
+<meta property="article:modified_time" content="2024-06-06T09:18:41.816Z">
+<meta property="article:author" content="bananaships">
+<meta property="article:tag" content="DLL注入">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606170734984-1603617283.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>DLL注入技术简介</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/06/06/DLL%E9%9A%90%E8%97%8F%E5%88%9D%E6%8E%A2/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&text=DLL注入技术简介"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&title=DLL注入技术简介"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&is_video=false&description=DLL注入技术简介"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DLL注入技术简介&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&title=DLL注入技术简介"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&title=DLL注入技术简介"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&title=DLL注入技术简介"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&title=DLL注入技术简介"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&name=DLL注入技术简介&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&t=DLL注入技术简介"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DLL%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF"><span class="toc-number">1.</span> <span class="toc-text">DLL注入技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-dll%E6%B3%A8%E5%85%A5%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">一.dll注入的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-dll%E6%8A%80%E6%9C%AF%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88%E4%B8%BB%E8%A6%81%E6%96%B9%E9%9D%A2%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">二.dll技术的应用（主要方面）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-dll%E7%9B%B8%E5%85%B3%E7%9A%84API"><span class="toc-number">1.3.</span> <span class="toc-text">三.dll相关的API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%EF%BC%9A"><span class="toc-number">1.4.</span> <span class="toc-text">四.编写代码前的准备工作：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-OpenProcess%E5%87%BD%E6%95%B0"><span class="toc-number">1.4.1.</span> <span class="toc-text">1.OpenProcess函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-VirtualAllocEx%E5%87%BD%E6%95%B0"><span class="toc-number">1.4.2.</span> <span class="toc-text">2.VirtualAllocEx函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-WriteProcessMemory%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="toc-number">1.4.3.</span> <span class="toc-text">3.WriteProcessMemory函数：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-CreateRemoteThread%E5%87%BD%E6%95%B0"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.CreateRemoteThread函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-LoadLibrary%E5%87%BD%E6%95%B0"><span class="toc-number">1.4.5.</span> <span class="toc-text">5.LoadLibrary函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-DLL%E6%B3%A8%E5%85%A5%E5%9B%9B%E4%B8%AA%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.5.</span> <span class="toc-text">五.DLL注入四个步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%8A%80%E6%9C%AF%E4%BB%8B%E7%BB%8D%EF%BC%9A"><span class="toc-number">1.5.1.</span> <span class="toc-text">1.技术介绍：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-LoadLibrary-%E9%99%84%E5%8A%A0%E5%87%BD%E6%95%B0%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8F%82%E6%95%B0%E8%A1%A5%E5%85%85"><span class="toc-number">1.5.2.</span> <span class="toc-text">2.LoadLibrary()[附加函数原型和参数补充]</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        DLL注入技术简介
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">bananaships</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-06-06T09:07:27.000Z" class="dt-published" itemprop="datePublished">2024-06-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/DLL%E5%9F%BA%E7%A1%80/">DLL基础</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/DLL%E6%B3%A8%E5%85%A5/" rel="tag">DLL注入</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="DLL注入技术"><a href="#DLL注入技术" class="headerlink" title="DLL注入技术"></a>DLL注入技术</h1><p>属于是非常笼统了，基本没有啥自己写的东西qaq</p>
+<h2 id="一-dll注入的概念"><a href="#一-dll注入的概念" class="headerlink" title="一.dll注入的概念"></a>一.dll注入的概念</h2><p>​	当一个进程运行时，它会加载并使用一些<strong>动态链接库</strong>（DLL）来提供额外的功能和资源。这些DLL可以被多个进程共享，使得代码重用和资源共享变得更加高效。DLL注入技术利用了这种共享机制。它允许向正在运行的进程中注入一个动态链接库（DLL），被注入的DLL可以利用它所在的进程的权限执行一些特殊的任务，比如修改进程内存中的数据、劫持进程的执行流程、监控进程的行为等等。<br>​	<strong>dll注入的本质就是把一个不属于某个进程的dll文件加载到该进程当中。</strong></p>
+<p>​	<strong>DLL注入与一般DLL加载的主要区别是加载的目标进程是其自身或者其他进程。</strong></p>
+<p>​	插入基础知识：</p>
+<p>​		<strong>Kernel32.dll</strong>(包含管理内存，进程和线程相关的函数)，“<strong>User32.dll</strong>”(大部分是用户接口函数)，和“<strong>GDI32.dll</strong>”(绘制图像和显示文本相关的函数)</p>
+<h2 id="二-dll技术的应用（主要方面）"><a href="#二-dll技术的应用（主要方面）" class="headerlink" title="二.dll技术的应用（主要方面）"></a>二.dll技术的应用（主要方面）</h2><p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606170734984-1603617283.png" alt="image-20231008193615305"></p>
+<h2 id="三-dll相关的API"><a href="#三-dll相关的API" class="headerlink" title="三.dll相关的API"></a>三.dll相关的API</h2><table>
+<thead>
+<tr>
+<th>OpenProcess</th>
+<th align="left">打开远程进程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VirtualAllocEx</td>
+<td align="left">在远程进程中申请内存空间</td>
+</tr>
+<tr>
+<td>WriteProcessMemory</td>
+<td align="left">写入数据到远程进程</td>
+</tr>
+<tr>
+<td>CreateRemoteThread</td>
+<td align="left">创建远程线程</td>
+</tr>
+<tr>
+<td>Loadlibrary</td>
+<td align="left">加载模块</td>
+</tr>
+<tr>
+<td>WaitForSingleObject</td>
+<td align="left">等待信号</td>
+</tr>
+<tr>
+<td>VirturalFreeEx</td>
+<td align="left">释放远程进程内存空间</td>
+</tr>
+<tr>
+<td>CloseHandle</td>
+<td align="left">关闭句柄</td>
+</tr>
+</tbody></table>
+<h2 id="四-编写代码前的准备工作："><a href="#四-编写代码前的准备工作：" class="headerlink" title="四.编写代码前的准备工作："></a>四.编写代码前的准备工作：</h2><h3 id="1-OpenProcess函数"><a href="#1-OpenProcess函数" class="headerlink" title="1.OpenProcess函数"></a>1.OpenProcess函数</h3><p>​	OpenProcess是windows操作系统提供的一个函数，它用于打开一个现有的进程，并返回一个与该进程关联的进程句柄。该函数的原型如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HANDLE <span class="title function_">OpenProcess</span><span class="params">(</span></span><br><span class="line"><span class="params">  DWORD dwDesiredAccess,</span></span><br><span class="line"><span class="params">  BOOL bInheritHandle,</span></span><br><span class="line"><span class="params">  DWORD dwProcessId</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<p>dwDesiredAccess：指定进程的访问权限。这可以是一些常量值的组合，如PROCESS_ALL_ACCESS、PROCESS_CREATE_PROCESS、PROCESS_QUERY_INFORMATION等。<br>bInheritHandle：指定新句柄是否可以被继承。如果为TRUE，则新句柄可以被继承；如果为FALSE，则新句柄不可以被继承。<br>dwProcessId：指定要打开的进程的进程ID号。</p>
+<p><strong>OpenProcess函数可以用于获取一个现有进程的句柄，以便在该进程中执行一些操作，如读取或写入进程内存、修改进程的安全属性、发送消息等。需要注意的是，不同的进程拥有不同的访问权限，因此在使用OpenProcess函数时需要正确设置进程的访问权限，以避免权限问题导致的操作失败。</strong></p>
+<p>OpenProcess函数常用于编写一些系统工具或调试程序，以及一些需要与其他进程交互的应用程序。<strong>在编写一些恶意软件或攻击程序时，OpenProcess函数也可以被用于获取另一个进程的句柄，并对其进行一些未授权的操作</strong>。因此，在使用OpenProcess函数时需要谨慎，以避免对系统造成不良影响。</p>
+<h3 id="2-VirtualAllocEx函数"><a href="#2-VirtualAllocEx函数" class="headerlink" title="2.VirtualAllocEx函数"></a>2.VirtualAllocEx函数</h3><p>VirtualAllocEx是Windows操作系统提供的一个函数，用于在指定进程的虚拟地址空间中分配内存。函数原型如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">LPVOID <span class="title function_">VirtualAllocEx</span><span class="params">(</span></span><br><span class="line"><span class="params">  HANDLE hProcess,</span></span><br><span class="line"><span class="params">  LPVOID lpAddress,</span></span><br><span class="line"><span class="params">  SIZE_T dwSize,</span></span><br><span class="line"><span class="params">  DWORD flAllocationType,</span></span><br><span class="line"><span class="params">  DWORD flProtect</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>函数参数说明：</p>
+<p>hProcess：指定要在哪个进程中分配内存，该参数需要指定要分配内存的进程句柄。<br>lpAddress：指定欲分配的虚拟内存起始地址，如果为NULL，表示由系统自动选择一个合适的地址。<br>dwSize：指定要分配的内存大小，以字节为单位。<br>flAllocationType：指定内存分配的类型，可以使用一些常量值如MEM_COMMIT、MEM_RESERVE等。<br>flProtect：指定内存的保护属性，可以使用一些常量值如PAGE_READWRITE、PAGE_EXECUTE_READ等。</p>
+<p><strong>VirtualAllocEx函数的返回值是一个LPVOID类型的指针，指向在指定进程的虚拟地址空间中分配的内存的起始地址。如果函数调用失败，则返回NULL</strong></p>
+<p>使用VirtualAllocEx函数可以实现在指定进程的虚拟地址空间中分配内存，从而使得其他进程可以访问和使用该内存。需要注意的是，<strong>使用VirtualAllocEx函数分配的内存需要在使用完毕后通过VirtualFreeEx函数释放</strong>，以避免内存泄漏和资源浪费。</p>
+<h3 id="3-WriteProcessMemory函数："><a href="#3-WriteProcessMemory函数：" class="headerlink" title="3.WriteProcessMemory函数："></a>3.WriteProcessMemory函数：</h3><p>WriteProcessMemory函数是Windows API中的一个函数，它可以将数据写入到指定进程的内存中。该函数可以用于在一个进程中注入代码或数据，实现进程间通信等功能。声明如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">BOOL <span class="title function_">WriteProcessMemory</span><span class="params">(</span></span><br><span class="line"><span class="params">  HANDLE  hProcess,</span></span><br><span class="line"><span class="params">  LPVOID  lpBaseAddress,</span></span><br><span class="line"><span class="params">  LPCVOID lpBuffer,</span></span><br><span class="line"><span class="params">  SIZE_T  nSize,</span></span><br><span class="line"><span class="params">  SIZE_T  *lpNumberOfBytesWritten</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<p>hProcess：目标进程的句柄。<br>lpBaseAddress：要写入数据的目标进程内存的起始地址。<br>lpBuffer：要写入的数据缓冲区的指针。<br>nSize：要写入的数据的大小，以字节为单位。<br>lpNumberOfBytesWritten：一个指向变量的指针，用于接收实际写入的字节数。</p>
+<p>WriteProcessMemory函数返回的是一个<em><strong>布尔类型</strong></em>的值，表示有没有写内存成功。</p>
+<h3 id="4-CreateRemoteThread函数"><a href="#4-CreateRemoteThread函数" class="headerlink" title="4.CreateRemoteThread函数"></a>4.CreateRemoteThread函数</h3><p>CreateRemoteThread是Windows操作系统提供的一个函数，它可以在指定的进程空间中创建一个<strong>远程线程</strong>，以便在该进程中执行指定的函数。函数原型如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HANDLE <span class="title function_">CreateRemoteThread</span><span class="params">(</span></span><br><span class="line"><span class="params">  HANDLE hProcess,</span></span><br><span class="line"><span class="params">  LPSECURITY_ATTRIBUTES lpThreadAttributes,</span></span><br><span class="line"><span class="params">  SIZE_T dwStackSize,</span></span><br><span class="line"><span class="params">  LPTHREAD_START_ROUTINE lpStartAddress,</span></span><br><span class="line"><span class="params">  LPVOID lpParameter,</span></span><br><span class="line"><span class="params">  DWORD dwCreationFlags,</span></span><br><span class="line"><span class="params">  LPDWORD lpThreadId</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>函数参数说明：</p>
+<p>hProcess：指定要在哪个进程中创建线程，该参数需要指定要创建线程的进程句柄。<br>lpThreadAttributes：指定线程的安全属性，如果不需要设置，则传入NULL即可。<br>dwStackSize：指定线程的堆栈大小，如果不需要设置，则传入0即可。<br>lpStartAddress：指定要在远程线程中执行的函数地址。<br>lpParameter：指定要传递给远程线程的参数。<br>dwCreationFlags：指定线程的创建标志，可以使用一些常量值如0、CREATE_SUSPENDED等。<br>lpThreadId：指向一个变量，用于返回线程ID号。</p>
+<p>使用CreateRemoteThread函数可以实现在一个进程空间中注入一个线程，并且可以传递一些参数给该线程。该函数常用于编写一些系统工具或调试程序，以及一些需要与其他进程交互的应用程序。</p>
+<p>以下是一个使用CreateRemoteThread函数实现DLL注入的示例代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取目标进程句柄</span></span><br><span class="line">    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, <span class="number">1234</span>);</span><br><span class="line">    <span class="keyword">if</span> (hProcess == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 获取LoadLibrary函数地址</span></span><br><span class="line">    LPVOID lpLoadLibrary = GetProcAddress(GetModuleHandle(TEXT(<span class="string">&quot;kernel32.dll&quot;</span>)), <span class="string">&quot;LoadLibraryA&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (lpLoadLibrary == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        CloseHandle(hProcess);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 分配内存空间</span></span><br><span class="line">    LPVOID lpDllPath = VirtualAllocEx(hProcess, <span class="literal">NULL</span>, <span class="built_in">strlen</span>(<span class="string">&quot;C:\\test.dll&quot;</span>) + <span class="number">1</span>, MEM_COMMIT, PAGE_READWRITE);</span><br><span class="line">    <span class="keyword">if</span> (lpDllPath == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        CloseHandle(hProcess);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 将DLL路径写入目标进程内存</span></span><br><span class="line">    WriteProcessMemory(hProcess, lpDllPath, <span class="string">&quot;C:\\test.dll&quot;</span>, <span class="built_in">strlen</span>(<span class="string">&quot;C:\\test.dll&quot;</span>) + <span class="number">1</span>, <span class="literal">NULL</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 在目标进程中创建远程线程</span></span><br><span class="line">    HANDLE hThread = CreateRemoteThread(hProcess, <span class="literal">NULL</span>, <span class="number">0</span>, (LPTHREAD_START_ROUTINE)lpLoadLibrary, lpDllPath, <span class="number">0</span>, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (hThread == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        VirtualFreeEx(hProcess, lpDllPath, <span class="built_in">strlen</span>(<span class="string">&quot;C:\\test.dll&quot;</span>) + <span class="number">1</span>, MEM_RELEASE);</span><br><span class="line">        CloseHandle(hProcess);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 等待线程结束</span></span><br><span class="line">    WaitForSingleObject(hThread, INFINITE);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 关闭句柄，释放内存</span></span><br><span class="line">    CloseHandle(hThread);</span><br><span class="line">    VirtualFreeEx(hProcess, lpDllPath, <span class="built_in">strlen</span>(<span class="string">&quot;C:\\test.dll&quot;</span>) + <span class="number">1</span>, MEM_RELEASE);</span><br><span class="line">    CloseHandle(hProcess);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-LoadLibrary函数"><a href="#5-LoadLibrary函数" class="headerlink" title="5.LoadLibrary函数"></a>5.LoadLibrary函数</h3><p>LoadLibrary函数是Windows操作系统提供的一个函数，它可以加载一个动态链接库（DLL）文件到进程空间中，并返回该DLL的句柄。</p>
+<p>需要注意的是<strong>它仅仅是把dll文件加载到进程的空间，但是想要调用这个dll还需要别的操作，比如在这个dll的DllMain里面添加附加到线程的时候执行</strong>等等。</p>
+<p><code>DllMain</code> 是 Windows DLL 中的一个特殊函数，用于处理 DLL 的加载、卸载以及其他状态的通知。</p>
+<p>该函数的签名为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOL APIENTRY <span class="title function_">DllMain</span><span class="params">(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<p>hModule: DLL 的模块句柄。该参数可以用来获取 DLL 中的其他资源，例如资源文件、函数地址等。<br>ul_reason_for_call: 表示 DLL 被加载、卸载或者其他状态的通知。可能的值包括：<br>DLL_PROCESS_ATTACH: DLL 被进程加载时调用。<br>DLL_PROCESS_DETACH: DLL 被进程卸载时调用。<br>DLL_THREAD_ATTACH: 进程创建新线程时调用。<br>DLL_THREAD_DETACH: 进程中线程退出时调用。<br>lpReserved: 保留参数。在实际开发中，一般不使用该参数。<br>在<strong>实际使用中，DllMain 函数常用于执行一些初始化或清理操作</strong>，例如：</p>
+<p>在 DLL 加载时，进行资源的初始化，例如初始化共享内存、建立临界区等。<br>在 DLL 卸载时，进行资源的释放，例如清除共享内存、释放临界区等。<br>需要注意的是，在 DllMain 函数中，有一些操作是不安全的，例如：</p>
+<p>调用其他 DLL 函数。这可能会导致死锁或死循环，因为其他 DLL 函数也可能调用 DllMain 函数。<br>创建新线程。<strong>在 DllMain 函数中创建新线程可能会导致死锁，因为该函数会在 DLL 加载之前被调用，此时可能没有完成初始化操作。</strong><br>调用某些系统函数。某些系统函数可能会使用其他 DLL，这可能会导致死锁或死循环。<br>因此，在编写 DllMain 函数时需要小心谨慎，避免出现安全问题。</p>
+<h2 id="五-DLL注入四个步骤"><a href="#五-DLL注入四个步骤" class="headerlink" title="五.DLL注入四个步骤"></a>五.DLL注入四个步骤</h2><p>(四个步骤)</p>
+<p><strong>1）附加</strong>到目标&#x2F;远程进程</p>
+<p>2）在目标&#x2F;远程进程内<strong>分配内存</strong></p>
+<p>3）将DLL文件路径，或者DLL文件，<strong>复制到目标&#x2F;远程进程的内存空间</strong></p>
+<p>4）控制进程<strong>运行DLL文件</strong></p>
+<h3 id="1-技术介绍："><a href="#1-技术介绍：" class="headerlink" title="1.技术介绍："></a>1.技术介绍：</h3><p>​	我们有多种方式可以控制进程运行我们的DLL文件。最普通的应该是“CreateRemoteThread()”和“NtCreateThreadEx()”函数；然而，不可能仅仅向这些函数传递一个DLL文件作为参数，我们必须<strong>提供一个包含执行起点的内存地址</strong>。为此，我们需要分配内存，使用“LoadLibrary()”加载我们的DLL文件，复制内存，等等。</p>
+<p>​	以下还有7种注入方法：</p>
+<ul>
+<li>CreateRemoteThread()</li>
+<li>NtCreateThreadEx()</li>
+<li>QueueUserAPC</li>
+<li>SetWindowsHookEx()</li>
+<li>RtlCreateUserThread()</li>
+<li>利用SetThreadContext()找到的代码区域</li>
+<li>反射DLL</li>
+</ul>
+<h3 id="2-LoadLibrary-附加函数原型和参数补充"><a href="#2-LoadLibrary-附加函数原型和参数补充" class="headerlink" title="2.LoadLibrary()[附加函数原型和参数补充]"></a>2.<strong>LoadLibrary()</strong>[附加函数原型和参数补充]</h3><p>“LoadLibrary()”函数“被用于向调用进程的地址空间加载指定模块，而该指定模块可能导致其他模块被加载”。<strong>函数原型与参数说明</strong>如下所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">HMODULE WINAPI <span class="title function_">LoadLibrary</span><span class="params">(</span></span><br><span class="line"><span class="params">_IN_ LPCRSTR lpFileName</span></span><br><span class="line"><span class="params">)</span>;</span><br><span class="line"><span class="comment">//lpFileName    [输入参数]</span></span><br><span class="line"><span class="comment">//模块名称。该模块可能是一个库模块（.dll文件），或者一个可执行模块（.exe文件）</span></span><br><span class="line"><span class="comment">//（…）</span></span><br><span class="line"><span class="comment">//若字符串指定了一个完全路径，则函数只在该路径下搜索模块；</span></span><br><span class="line"><span class="comment">//若字符串指定了一个相对路径或者无路径的模块名称，则函数使用标准搜索策略来查找模块。</span></span><br><span class="line"><span class="comment">//（…）</span></span><br><span class="line"><span class="comment">//若函数无法找到模块，则函数执行失败。当指定路径时，必须使用反斜线（\）而不是斜线（/）。</span></span><br><span class="line"><span class="comment">//（…）</span></span><br><span class="line"><span class="comment">//如果字符串指定了一个无路径的模块名称并且无文件名后缀，则函数默认在模块名称后面添加库文件后缀.dll。</span></span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DLL%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF"><span class="toc-number">1.</span> <span class="toc-text">DLL注入技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-dll%E6%B3%A8%E5%85%A5%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">一.dll注入的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-dll%E6%8A%80%E6%9C%AF%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88%E4%B8%BB%E8%A6%81%E6%96%B9%E9%9D%A2%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">二.dll技术的应用（主要方面）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-dll%E7%9B%B8%E5%85%B3%E7%9A%84API"><span class="toc-number">1.3.</span> <span class="toc-text">三.dll相关的API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%EF%BC%9A"><span class="toc-number">1.4.</span> <span class="toc-text">四.编写代码前的准备工作：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-OpenProcess%E5%87%BD%E6%95%B0"><span class="toc-number">1.4.1.</span> <span class="toc-text">1.OpenProcess函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-VirtualAllocEx%E5%87%BD%E6%95%B0"><span class="toc-number">1.4.2.</span> <span class="toc-text">2.VirtualAllocEx函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-WriteProcessMemory%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="toc-number">1.4.3.</span> <span class="toc-text">3.WriteProcessMemory函数：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-CreateRemoteThread%E5%87%BD%E6%95%B0"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.CreateRemoteThread函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-LoadLibrary%E5%87%BD%E6%95%B0"><span class="toc-number">1.4.5.</span> <span class="toc-text">5.LoadLibrary函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-DLL%E6%B3%A8%E5%85%A5%E5%9B%9B%E4%B8%AA%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.5.</span> <span class="toc-text">五.DLL注入四个步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%8A%80%E6%9C%AF%E4%BB%8B%E7%BB%8D%EF%BC%9A"><span class="toc-number">1.5.1.</span> <span class="toc-text">1.技术介绍：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-LoadLibrary-%E9%99%84%E5%8A%A0%E5%87%BD%E6%95%B0%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8F%82%E6%95%B0%E8%A1%A5%E5%85%85"><span class="toc-number">1.5.2.</span> <span class="toc-text">2.LoadLibrary()[附加函数原型和参数补充]</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&text=DLL注入技术简介"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&title=DLL注入技术简介"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&is_video=false&description=DLL注入技术简介"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DLL注入技术简介&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&title=DLL注入技术简介"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&title=DLL注入技术简介"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&title=DLL注入技术简介"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&title=DLL注入技术简介"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&name=DLL注入技术简介&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/DLL%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B/&t=DLL注入技术简介"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    bananaships
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

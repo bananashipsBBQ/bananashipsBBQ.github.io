@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="SCTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SCTF-WP">
+<meta property="og:url" content="https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/index.html">
+<meta property="og:site_name" content="黄昏之时.">
+<meta property="og:description" content="SCTF">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001213130423-811191505.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001213853140-1382049546.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001214350626-636370758.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001214445245-1908989616.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001214801944-966783544.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001215243059-1301510812.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001215522827-1988550051.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001215827397-64849074.png">
+<meta property="article:published_time" content="2024-10-01T13:24:44.000Z">
+<meta property="article:modified_time" content="2024-10-02T09:05:46.837Z">
+<meta property="article:author" content="bananaships">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001213130423-811191505.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>SCTF-WP</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/11/04/24%E5%BC%BA%E7%BD%91%E6%9D%AF/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&text=SCTF-WP"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&title=SCTF-WP"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&is_video=false&description=SCTF-WP"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SCTF-WP&body=Check out this article: https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&title=SCTF-WP"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&title=SCTF-WP"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&title=SCTF-WP"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&title=SCTF-WP"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&name=SCTF-WP&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&t=SCTF-WP"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Re-WP%EF%BC%88%E6%9B%B4%E6%96%B0%E4%B8%AD%E2%80%A6%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">Re-WP（更新中…）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Logindemo"><span class="toc-number">1.1.</span> <span class="toc-text">Logindemo</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        SCTF-WP
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">bananaships</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-10-01T13:24:44.000Z" class="dt-published" itemprop="datePublished">2024-10-01</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Writeup/">Writeup</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/CTF/" rel="tag">CTF</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Re-WP（更新中…）"><a href="#Re-WP（更新中…）" class="headerlink" title="Re-WP（更新中…）"></a>Re-WP（更新中…）</h1><h2 id="Logindemo"><a href="#Logindemo" class="headerlink" title="Logindemo"></a>Logindemo</h2><p>一开始用jadx看的，给我看傻逼了说是，带了比较抽象的混淆，然后导致我看了好久才理清楚逻辑</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001213130423-811191505.png" alt="image-20241001213128258"></p>
+<p>后面用JEB看就舒服多了，从最后由网络行为发出去的签名往回推即可，锁定<code>secretKey</code>这个变量</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001213853140-1382049546.png" alt="image-20241001213851019"></p>
+<p>这里<code>secretKey</code>往回的第一个函数有点迷，拷打了一下gpt，说是反射的dex_class.dex这个文件中的<code>say_hello</code>方法</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001214350626-636370758.png" alt="image-20241001214349109"></p>
+<p>跟进这个方法之后发现就是一个异或</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001214445245-1908989616.png" alt="image-20241001214443555"></p>
+<p>从给的另一个附件中锁定关键数据，解出<code>secretKey</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">table=<span class="string">&#x27;S0C0Z0Y0W&#x27;</span></span><br><span class="line">encoded_str = <span class="string">&quot;YgNxAGMDawJjZQR6B2IGYANiYQVxAG8JYQhkawZ3AW8JagluYAN2Am4GbQRmZAR6AWwBbQNlZANxCWsCaAlhZQRxAm4CbgRkZgl1AWIIawhmYAh3B2MBaAJmaghwAWoEbwliYgBwCWkIbQNuawlyAW0FYAhuYgB1Am8CawRuYAJxCG8CbgRgZAF3BWgJYQlhZwFzAGsJbwFlagV0CW0FawhgawNyCGkAbQNjYQh3Bm4FbwNkYAJ6A2IDaANmYwl2A2sEaQRlaglyAm0HaARmYQZ7AWsIbwZhYwB0B2sIYAlvYgN2AWsHYQJiZAByAGgDYANmYQB0BmwJYABhZwl1CGkEaQlmZQJzBm0IYQdjYwh6A20BbwVhZQl3CGoIaABmYAN1AW0IbQFvYAN0B2gFYAVhZAF1BW8HYQZvagZ6A20CaAhjZAl6BWkCYQhvZAN1AGgDaQJhYQZzCW8BYABjZAN0AW8BbQViZwVyA28JagJiagd1CGgDawhvYQJwB28GagNvYwd6AG0BYQFuawVyBGoBaQFkZAV1A24HbgdlYgd1AWwIYQNkagV6BW0DbglvZAl0A2kFaAhjawB3AmwAbwZgZwV3BGMEaQllYAhzAGsEYAFhYAJ6Bm4GaQdkagl6A20DawdkZgd3BW0JbgRgYQZyB2kJbANnZgdwA2gFaQFnYAh7BW4GbAdhYgd7Bm4DawJmawN0CWMDbgJgYwh0AmwGYQRiYQN2BmIGaAVkYwh2BmsDbAFhaglzB2kAbQBjZwJ1BGkCaghiZgByAWkJaAhhagZ3AG0JaghiYQVwAmMIaAFjYgVzBGh0dHA6Ly80Ny4xMDkuMTA2LjYyOjkwOTB7Im5hbWUiOiJTQ1RGIiwicGFzc3dvcmQiOiI4ODg4ODg4OCJ9&quot;</span></span><br><span class="line"></span><br><span class="line">decoded_bytes = base64.b64decode(encoded_str)</span><br><span class="line"></span><br><span class="line">str_index = decoded_bytes.index(<span class="string">b&quot;http&quot;</span>)</span><br><span class="line">decoded_bytes = <span class="built_in">bytearray</span>(decoded_bytes[:str_index])</span><br><span class="line"><span class="comment">#print(decoded_bytes.decode(&#x27;utf-8&#x27;))</span></span><br><span class="line"></span><br><span class="line">de_data=[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(decoded_bytes)):</span><br><span class="line">    de_data.append(<span class="built_in">chr</span>(decoded_bytes[i]^<span class="built_in">ord</span>(table[i%<span class="built_in">len</span>(table)])))</span><br><span class="line"></span><br><span class="line">decrypted_str = <span class="string">&#x27;&#x27;</span>.join(de_data)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;after_invoke:&quot;</span>, decrypted_str)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>异或完之后接着往回逆，逻辑倒过来的话那就是先解native层的<code>Getstr.getNothing</code>，然后是<code>LoginActivity.transform</code>，最后是<code>GoodCard.anything</code></p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001214801944-966783544.png" alt="image-20241001214800294"></p>
+<p>先跟进<code>Getstr.getNothing</code>，比赛的时候太着急了，当时看到65537迟钝了一秒，感觉好熟悉，但是就死活没想起来是RSA加密，反编译之后直接锁定到关键的取值函数，从一坨数字中取出RSA的q和p</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001215243059-1301510812.png" alt="image-20241001215241524"></p>
+<p>用下面的RSA板子直接解</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">modular_exponentiation</span>(<span class="params">base, exp, mod</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    快速模幂运算，计算 (base^exp) % mod</span></span><br><span class="line"><span class="string">    使用指数的二进制展开方法以加速大整数运算。</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    result = <span class="number">1</span></span><br><span class="line">    base = base % mod  <span class="comment"># 确保 base 小于 mod</span></span><br><span class="line">    <span class="keyword">while</span> exp &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">if</span> exp % <span class="number">2</span> == <span class="number">1</span>:  <span class="comment"># 如果 exp 是奇数</span></span><br><span class="line">            result = (result * base) % mod</span><br><span class="line">        exp = exp &gt;&gt; <span class="number">1</span>  <span class="comment"># exp //= 2</span></span><br><span class="line">        base = (base * base) % mod  <span class="comment"># base 的平方</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rsa_decrypt</span>(<span class="params">ciphertext, d, n</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    使用 RSA 私钥指数 d 和模数 n 解密密文。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    :param ciphertext: 加密后的密文 (整数形式)</span></span><br><span class="line"><span class="string">    :param d: 私钥指数</span></span><br><span class="line"><span class="string">    :param n: 模数</span></span><br><span class="line"><span class="string">    :return: 解密后的明文 (整数形式)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> modular_exponentiation(ciphertext, d, n)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rsa_keygen</span>(<span class="params">p, q, e</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    给定质数 p 和 q 以及公钥指数 e，生成 RSA 密钥对。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    :param p: 质数 p</span></span><br><span class="line"><span class="string">    :param q: 质数 q</span></span><br><span class="line"><span class="string">    :param e: 公钥指数 e</span></span><br><span class="line"><span class="string">    :return: (n, e, d) 三元组，分别是模数 n，公钥指数 e 和私钥指数 d</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 计算模数 n</span></span><br><span class="line">    n = p * q</span><br><span class="line">    <span class="comment"># 计算欧拉函数 φ(n)</span></span><br><span class="line">    phi = (p - <span class="number">1</span>) * (q - <span class="number">1</span>)</span><br><span class="line">    <span class="comment"># 计算私钥指数 d</span></span><br><span class="line">    d = mod_inverse(e, phi)</span><br><span class="line">    <span class="keyword">return</span> n, e, d</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">extended_gcd</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    扩展欧几里得算法，计算 a 和 b 的最大公约数，并找到 a 的模逆元。</span></span><br><span class="line"><span class="string">    返回 gcd, x, y，其中 gcd 是 a 和 b 的最大公约数，x 和 y 满足 gcd = a * x + b * y。</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> b, <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    gcd, x1, y1 = extended_gcd(b % a, a)</span><br><span class="line">    x = y1 - (b // a) * x1</span><br><span class="line">    y = x1</span><br><span class="line">    <span class="keyword">return</span> gcd, x, y</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mod_inverse</span>(<span class="params">e, phi</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    计算 e 关于 φ(n) 的模逆元 d，使得 (d * e) % phi == 1。</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    gcd, x, y = extended_gcd(e, phi)</span><br><span class="line">    <span class="keyword">if</span> gcd != <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;e 和 φ(n) 不是互质的，无法计算模逆元&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> x % phi</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 给定的质数 p 和 q</span></span><br><span class="line">    p = <span class="number">106697219132480173106064317148705638676529121742557567770857687729397446898790451577487723991083173010242416863238099716044775658681981821407922722052778958942891831033512463262741053961681512908218003840408526915629689432111480588966800949428079015682624591636010678691927285321708935076221951173426894836169</span></span><br><span class="line">    q = <span class="number">144819424465842307806353672547344125290716753535239658417883828941232509622838692761917211806963011168822281666033695157426515864265527046213326145174398018859056439431422867957079149967592078894410082695714160599647180947207504108618794637872261572262805565517756922288320779308895819726074229154002310375209</span></span><br><span class="line">    e = <span class="number">65537</span> </span><br><span class="line"></span><br><span class="line">    n, e, d = rsa_keygen(p, q, e)</span><br><span class="line"></span><br><span class="line">    ciphertext = <span class="number">1320932246497869352520598838641593993352464417491614327329121966422427435961882813847911219831046951039384398911759891062522493228527477145298964100196129579752878318304342846456333293831310953140429912771412681186660077189981351178257010239312076699064968340916206788740893716566948081013361784183377259567165578689693721847995328887360230262609519047371514554513593259768232882237563380790718198514010137563477721761688339595737987973351848042606674544940923800149163296460739993732735745797472617395305733250103885465761786432218379937270872668452356861530856135169907304044264323855011391869640793852532981141504</span></span><br><span class="line"></span><br><span class="line">    decrypted_message = rsa_decrypt(ciphertext, d, n)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;decrypted_message&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment">#12100119001160011500550010400117001090010600530010400540010300</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>再看下一层，transform就是给ascll码乘100，用上述解出来的结果除回去即可得到<code>121 119 116 115 55 104 117 109 106 53 104 54 103</code></p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001215522827-1988550051.png" alt="image-20241001215520989"></p>
+<p>然后最后一层就是一堆混乱排序的操作，一开始想逆，搓了一会儿脚本感觉脑子要缺氧了，反正现在已经有密文了，长度也是知道的，直接模拟一下怎么打乱的不就好了</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241001215827397-64849074.png" alt="image-20241001215825635"></p>
+<p>上面的打乱顺序的java代码用python重构了一下即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyMath</span>:</span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">swap</span>(<span class="params">a, i, j</span>):</span><br><span class="line">        a[i], a[j] = a[j], a[i]</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GoodCard</span>:</span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">anything</span>(<span class="params">s</span>):</span><br><span class="line">        card = <span class="built_in">list</span>(s)</span><br><span class="line">        to = <span class="built_in">len</span>(card) - <span class="number">1</span></span><br><span class="line">        GoodCard.perfect(card, <span class="number">0</span>, to, (to + <span class="number">1</span>) // <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(card)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">circle</span>(<span class="params">a, start, i, n2</span>):</span><br><span class="line">        k = (i * <span class="number">2</span>) % n2</span><br><span class="line">        <span class="keyword">while</span> k != i:</span><br><span class="line">            temp = a[i + start]</span><br><span class="line">            a[i + start] = a[k + start]</span><br><span class="line">            a[k + start] = temp</span><br><span class="line">            k = (k * <span class="number">2</span>) % n2</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">perfect</span>(<span class="params">a, start, end, n</span>):</span><br><span class="line">        <span class="keyword">if</span> start &gt;= end:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> start == end - <span class="number">1</span>:</span><br><span class="line">            MyMath.swap(a, start, end)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        k = <span class="number">0</span></span><br><span class="line">        p = n * <span class="number">2</span> + <span class="number">1</span></span><br><span class="line">        k_3 = <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> k_3 &lt;= p // <span class="number">3</span>:</span><br><span class="line">            k += <span class="number">1</span></span><br><span class="line">            k_3 *= <span class="number">3</span></span><br><span class="line"></span><br><span class="line">        m = (k_3 - <span class="number">1</span>) // <span class="number">2</span></span><br><span class="line">        GoodCard.right_circle(a, start + m, start + n + m - <span class="number">1</span>, m)</span><br><span class="line">        </span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        t = <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; k:</span><br><span class="line">            GoodCard.circle(a, start - <span class="number">1</span>, t, m * <span class="number">2</span> + <span class="number">1</span>)</span><br><span class="line">            t *= <span class="number">3</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        GoodCard.perfect(a, m * <span class="number">2</span> + start, end, (end - (m * <span class="number">2</span> + start) + <span class="number">1</span>) // <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">reverse</span>(<span class="params">a, start, end</span>):</span><br><span class="line">        <span class="keyword">while</span> start &lt; end:</span><br><span class="line">            MyMath.swap(a, start, end)</span><br><span class="line">            start += <span class="number">1</span></span><br><span class="line">            end -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">right_circle</span>(<span class="params">a, start, end, n</span>):</span><br><span class="line">        m = n % (end - start + <span class="number">1</span>)</span><br><span class="line">        GoodCard.reverse(a, end - m + <span class="number">1</span>, end)</span><br><span class="line">        GoodCard.reverse(a, start, end - m)</span><br><span class="line">        GoodCard.reverse(a, start, end)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Example usage</span></span><br><span class="line">result = GoodCard.anything(<span class="string">&quot;abcdefghijklm&quot;</span>)</span><br><span class="line"></span><br><span class="line">table = <span class="string">&quot;abcdefghijklm&quot;</span></span><br><span class="line">flag = <span class="string">&quot;ywts7humj5h6g&quot;</span><span class="comment">#121 119 116 115 55 104 117 109 106 53 104 54 103</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(flag)):</span><br><span class="line">    <span class="built_in">print</span>(flag[result.index(table[i])],end=<span class="string">&quot;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Re-WP%EF%BC%88%E6%9B%B4%E6%96%B0%E4%B8%AD%E2%80%A6%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">Re-WP（更新中…）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Logindemo"><span class="toc-number">1.1.</span> <span class="toc-text">Logindemo</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&text=SCTF-WP"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&title=SCTF-WP"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&is_video=false&description=SCTF-WP"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SCTF-WP&body=Check out this article: https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&title=SCTF-WP"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&title=SCTF-WP"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&title=SCTF-WP"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&title=SCTF-WP"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&name=SCTF-WP&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/10/01/SCTF-WP/&t=SCTF-WP"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    bananaships
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

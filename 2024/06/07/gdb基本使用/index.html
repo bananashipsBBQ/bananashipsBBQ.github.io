@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="gdb基本使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gdb基本使用">
+<meta property="og:url" content="https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="黄昏之时.">
+<meta property="og:description" content="gdb基本使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607192311447-155938462.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607192946096-2033504101.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607193136662-1794980088.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607193324624-1744742507.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607193602446-56711658.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607194402765-805915283.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607194434845-1992105708.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607201218108-914327734.png">
+<meta property="article:published_time" content="2024-06-07T12:15:33.000Z">
+<meta property="article:modified_time" content="2024-06-07T12:21:35.265Z">
+<meta property="article:author" content="bananaships">
+<meta property="article:tag" content="gdb">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607192311447-155938462.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>gdb基本使用</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/07/18/Android-Study/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/06/06/24H-N%E9%80%86%E5%90%91-WP/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&text=gdb基本使用"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&title=gdb基本使用"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&is_video=false&description=gdb基本使用"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=gdb基本使用&body=Check out this article: https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&title=gdb基本使用"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&title=gdb基本使用"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&title=gdb基本使用"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&title=gdb基本使用"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&name=gdb基本使用&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&t=gdb基本使用"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">gdb基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E7%BC%96%E8%AF%91%E9%83%A8%E5%88%86"><span class="toc-number">1.1.</span> <span class="toc-text">一.编译部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">二.基本使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E6%96%AD%E7%82%B9%E5%91%BD%E4%BB%A4%E9%9B%86%E5%90%88"><span class="toc-number">1.3.</span> <span class="toc-text">三.断点命令集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E6%9F%A5%E7%9C%8B%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.</span> <span class="toc-text">四.查看变量</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        gdb基本使用
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">bananaships</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-06-07T12:15:33.000Z" class="dt-published" itemprop="datePublished">2024-06-07</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Linux%E5%85%A5%E9%97%A8/">Linux入门</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/gdb/" rel="tag">gdb</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="gdb基本使用"><a href="#gdb基本使用" class="headerlink" title="gdb基本使用"></a>gdb基本使用</h1><p>拖欠很久的gdb入门说明笔记，今天写一下，主要脑子不太好使，学一遍就忘，记一下。零零散散写一些，随便打打应该够了。</p>
+<h2 id="一-编译部分"><a href="#一-编译部分" class="headerlink" title="一.编译部分"></a>一.编译部分</h2><p>​	用gcc编译的时候需要记得给一个<code>-g</code>的参数，不然后面调不了</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607192311447-155938462.png" alt="image-20240607192310589"></p>
+<p>​	直接<code>gdb -q test</code>关掉版本信息，OK，gdb启动！</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607192946096-2033504101.png" alt="image-20240607192945947"></p>
+<p>​	如果不给<code>-g</code>的参数的话是这样的，没有调试的符号信息，就用不了gdb了，可怕不可怕</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607193136662-1794980088.png" alt="image-20240607193136461"></p>
+<h2 id="二-基本使用"><a href="#二-基本使用" class="headerlink" title="二.基本使用"></a>二.基本使用</h2><p>​	1.先<code>list</code>一下看看源码，默认显示前几行，回车继续往下看，这边就写了6行的helloworld哈哈哈</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607193324624-1744742507.png" alt="image-20240607193323948"></p>
+<p>​	2.<code>r</code>直接运行程序，遇到结束则退出，断点的话就等待下一条命令</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607193602446-56711658.png" alt="image-20240607193602207"></p>
+<p>​	3.程序没有断点，给它打个断点试试看，break(简写 b) ：格式 b 行号，在某行设置断点，<code>b 3</code>一下之后直接<code>info breakpoints</code>查看一下断点信息，然后再run一下看看捏</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607194402765-805915283.png" alt="image-20240607194402520"></p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607194434845-1992105708.png" alt="image-20240607194434522"></p>
+<p>​	为森莫他们都断在了第四行呢，因为我第三行压根没东西hhh，断点信息各部分如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">break(简写 b) ：格式 b 行号，在某行设置断点；</span><br><span class="line">info breakpoints ：显示断点信息</span><br><span class="line">Num： 断点编号</span><br><span class="line">Disp：断点执行一次之后是否有效 kep：有效 dis：无效</span><br><span class="line">Enb： 当前断点是否有效 y：有效 n：无效</span><br><span class="line">Address：内存地址</span><br><span class="line">What：位置</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三-断点命令集合"><a href="#三-断点命令集合" class="headerlink" title="三.断点命令集合"></a>三.断点命令集合</h2><p>run：简记为 r ，其作用是运行程序，当遇到断点后，程序会在断点处停止运行，等待用户输入下一步的命令。<br>continue （简写c ）：继续执行，到下一个断点处（或运行结束，<strong>类似f9</strong>）<br>next：（简写 n），单步跟踪程序，当遇到函数调用时，也不进入此函数体；此命令同 step 的主要区别是，step 遇到用户自定义的函数，将步进到函数中去运行，而 next 则直接调用函数，不会进入到函数体内。(<strong>类似f8</strong>)<br>step （简写s）：单步调试如果有函数调用，则进入函数；与命令n不同，n是不进入调用的函数的(<strong>类似f7</strong>)<br>until：当你厌倦了在一个循环体内单步跟踪时，这个命令可以运行程序直到退出循环体。<br>until+行号： 运行至某行，不仅仅用来跳出循环<br>finish： 运行程序，直到当前函数完成返回，并打印函数返回时的堆栈地址和返回值及参数值等信息。<br>call 函数(参数)：调用程序中可见的函数，并传递“参数”，如：call gdb_test(55)<br>quit：简记为 q ，退出gdb</p>
+<h2 id="四-查看变量"><a href="#四-查看变量" class="headerlink" title="四.查看变量"></a>四.查看变量</h2><p>使用print、whatis命令，print打印的为变量中存放的数据，而whatis打印的是该变量的类型，逐渐熟悉动调！</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240607201218108-914327734.png" alt="image-20240607201217704"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">gdb基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E7%BC%96%E8%AF%91%E9%83%A8%E5%88%86"><span class="toc-number">1.1.</span> <span class="toc-text">一.编译部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">二.基本使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E6%96%AD%E7%82%B9%E5%91%BD%E4%BB%A4%E9%9B%86%E5%90%88"><span class="toc-number">1.3.</span> <span class="toc-text">三.断点命令集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E6%9F%A5%E7%9C%8B%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.</span> <span class="toc-text">四.查看变量</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&text=gdb基本使用"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&title=gdb基本使用"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&is_video=false&description=gdb基本使用"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=gdb基本使用&body=Check out this article: https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&title=gdb基本使用"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&title=gdb基本使用"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&title=gdb基本使用"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&title=gdb基本使用"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&name=gdb基本使用&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/07/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&t=gdb基本使用"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    bananaships
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

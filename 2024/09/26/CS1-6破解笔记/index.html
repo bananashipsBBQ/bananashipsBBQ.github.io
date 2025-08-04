@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="CS1.6破解笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS1.6破解笔记">
+<meta property="og:url" content="https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="黄昏之时.">
+<meta property="og:description" content="CS1.6破解笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002161408672-317155661.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002161510175-402355969.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002161642589-168722020.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002161745566-227658246.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002162503958-1719021797.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002162555664-306790972.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002163259667-676726527.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002163525879-1447517715.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002163604766-784312078.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002164147446-671470730.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002164421080-1252644323.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002170034711-1203745879.png">
+<meta property="article:published_time" content="2024-09-26T11:33:30.000Z">
+<meta property="article:modified_time" content="2024-10-02T09:05:46.834Z">
+<meta property="article:author" content="bananaships">
+<meta property="article:tag" content="CrackMe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002161408672-317155661.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>CS1.6破解笔记</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/10/01/SCTF-WP/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/09/25/pwn%E9%A2%98%E6%97%A5%E8%AE%B0-BUU%E7%89%88/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&text=CS1.6破解笔记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&title=CS1.6破解笔记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&is_video=false&description=CS1.6破解笔记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CS1.6破解笔记&body=Check out this article: https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&title=CS1.6破解笔记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&title=CS1.6破解笔记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&title=CS1.6破解笔记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&title=CS1.6破解笔记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&name=CS1.6破解笔记&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&t=CS1.6破解笔记"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0"><span class="toc-number">1.</span> <span class="toc-text">CS1.6破解笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-%E6%97%A0%E9%99%90%E9%87%91%E9%92%B1"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 无限金钱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-%E9%80%8F%E8%A7%86%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.</span> <span class="toc-text">0x02 透视实现</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        CS1.6破解笔记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">bananaships</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-09-26T11:33:30.000Z" class="dt-published" itemprop="datePublished">2024-09-26</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/CrackMe/">CrackMe</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/CrackMe/" rel="tag">CrackMe</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="CS1-6破解笔记"><a href="#CS1-6破解笔记" class="headerlink" title="CS1.6破解笔记"></a>CS1.6破解笔记</h1><p>​	记得去年的这个时候上大二，去给23级的学弟学妹作纳新演讲，当时和hcj坐在第一排看学长演示破解环节来着，辉哥演示了破解植物大战僵尸的一系列操作，然后我就随口跟hcj打趣说，明年我就弄个CS1.6的破解（bushi），这颗子弹飞了一年，也是正中我的眉心了，确实也不是很难的一个事情，但是我也是认认真真学了不少东西，跟着网上的现有资料，一步步复现出了这个东西，记录一下捏~</p>
+<h2 id="0x01-无限金钱"><a href="#0x01-无限金钱" class="headerlink" title="0x01 无限金钱"></a>0x01 无限金钱</h2><p>​	其实在今年清明假期的时候，留学校了没出去玩，当时研究过一两天，记得当时就什么也不管，上来就开始用CE找机制，看变化找基址，后面给显示在屏幕上的目标数值的基址找到了，傻傻地以为这就是真正控制进程中的目标内容的基址，后面才反应过来这个事儿，也是因为技术太抽象踩上大坑了。。后面就忙别的事儿去了，直到这学期开始纳新，说是需要搞点活儿，我就又才弄这个东西。</p>
+<p>​	ok，正文开始，首先我们都知道，运行一个应用程序的时候，程序的可执行文件被加载到内存的某个地址空间。这个地址空间是程序在运行时独占的虚拟地址空间，程序并不知道具体的物理内存地址。通俗来说就是每次加载一个进程的时候，会给它分配一个总的基地址，这个基地址映射在真正的物理地址的某处位置，然后程序中的各个变量以及函数的地址也同样会被加载到这个所谓的虚拟地址，而程序中的各种繁琐的变量是根据什么来确定它该呆的地方呢？如果随意加载到任意内存位置的话，那么多的内容该怎么确保不充分呢？所以这里面存在有一些不变的偏移量，根据加载程序之后的基址来加上不变的偏移值，一步一步计算出每一次存储对应变量的真实内存地址。</p>
+<p>​	所以破解的流程就是使用CE一层层地去寻找对应变量的偏移量，从而层层下去一直到程序的基址。</p>
+<p>​	首先来找一下游戏中代币的基址，启动CE，然后附上进程，先直接搜索16000这个数值，默认该值为一个int类型所存储起来的，故类型选择4字节，然后首次搜索之后看到的绿色地址为基址</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002161408672-317155661.png" alt="image-20241002161353905"></p>
+<p>​	为了进一步确定该变量的实际地址具体为哪一个，我们花费一些代币，然后再次搜索数量值来确定地址，可见变化为10250的有两个地址，一开始我傻傻以为第一个绿色的基址就是我要找的，然后开心地给这个地址锁死了，快乐地开始消费，结果后面钱就不够了，但是我游戏界面的数额却一直都没有变化，后面左思右想才知道，原来表示游戏代币金额的有两个地址，刚刚的这个绿色基址是用来表示游戏界面上的显示金额的地址，也就是说锁死这个地址不变也就只能是控制我们看到的游戏界面的数额不变，并不是实际用来计算游戏商店中消费的金额代币，那么这样的话，下面的白色的地址即是用来存储一层偏移内容的地址。</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002161510175-402355969.png" alt="image-20241002161509427"></p>
+<p>​	由于这是最后一层，且这个地址里面存储的值确切地为我们的游戏代币的值，所以给它加到下面之后，选择找出是什么改写了这个地址选项，然后进入游戏再消费一波</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002161642589-168722020.png" alt="image-20241002161642102"></p>
+<p>然后跟进这个汇编指令查看详情，由下图可知，很明确的最后一层偏移的值为1CC，同时我们再取出此时寄存器ESI中的值，该值是一个动态的地址值，既是控制代币数量的上一层地址的值</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002161745566-227658246.png" alt="image-20241002161745316"></p>
+<p>复制出这层地址，然后重新搜索</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002162503958-1719021797.png" alt="image-20241002162503469"></p>
+<p>首先排除连续存在的这种地址存储目标内容的可能，下图中先查看最后一个地址，此处选择是什么访问了这个地址，因为这里不再是修改代币的数量内容的过程了，而是当这个游戏进程跑起来之后，它需要实时地去监控这一条地址链上的值，看是否对最终存放代币数量的那个地址进行了修改访问，而此处最后一个偏移已经被拿下，我们需要一层层往回推，所以此处应该选择访问</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002162555664-306790972.png" alt="image-20241002162555128"></p>
+<p>观测这几个地址之后发现只有倒数第二个地址<code>10336BF8</code>有实时地去访问行为，故第二层偏移为7C，像上面那样继续往下找下去</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002163259667-676726527.png" alt="image-20241002163258941"></p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002163525879-1447517715.png" alt="image-20241002163525467"></p>
+<p>将<code>10336B7C</code>复制出来之后继续扫描，此时你就会发现我们找到绿色的基址了，首先这两个绿色的基址，代表两个东西，一个是游戏界面中的游戏代币的实时数额，另一个就是我们正在寻找的游戏进程加载之后存储游戏代币的真正基址的值</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002163604766-784312078.png" alt="image-20241002163604495"></p>
+<p>给其中一个拉下去之后添加我们之前寻找到的偏移，就会发现加载出来的值和我们此时的金钱数相同</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002164147446-671470730.png" alt="image-20241002164146598"></p>
+<p>然后锁死这个地址之后购买一堆武器发现金钱并没有掉值，所以证明我们寻找正确</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002164421080-1252644323.png" alt="image-20241002164420518"></p>
+<p>上述对于金钱基址寻找的例子同样适用于其他数值的搜寻，例如hp、主武器子弹、护甲等等，此处就不一一寻找了，将该过程应用到代码中的片段贴出如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">changeMoney</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	vector&lt;<span class="type">unsigned</span> <span class="type">int</span>&gt; offsets;</span><br><span class="line">	offsets.<span class="built_in">push_back</span>(<span class="number">0x11069BC</span>);</span><br><span class="line">	offsets.<span class="built_in">push_back</span>(<span class="number">0x7C</span>); </span><br><span class="line">	offsets.<span class="built_in">push_back</span>(<span class="number">0x1CC</span>);</span><br><span class="line">	<span class="type">uintptr_t</span> addr = <span class="built_in">FindDMAAddy</span>(BaseAddress,offsets);</span><br><span class="line">	<span class="comment">//写入实际的money </span></span><br><span class="line">	<span class="built_in">WriteProcessMemory</span>(handle, (LPVOID)addr, &amp;money, <span class="built_in">sizeof</span>(money), <span class="number">0</span>);</span><br><span class="line">	<span class="comment">//写入显示的money </span></span><br><span class="line">	<span class="built_in">WriteProcessMemory</span>(handle, (LPVOID)(BaseAddress<span class="number">+0x61B9FC</span>), &amp;money, <span class="built_in">sizeof</span>(money), <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x02-透视实现"><a href="#0x02-透视实现" class="headerlink" title="0x02 透视实现"></a>0x02 透视实现</h2><p>实现完锁钱和锁血一系列操作之后，寻思搞一搞透视，感谢mz1大佬的文章和视频，讲得很通透，直接去hook opengl这个库中用于渲染遮挡物的字节码处，替换一下，只能说相当巧妙，写成了一个动态链接库，用注入器注入到目标进程即可，具体核心部分代码内容如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">setInlineHook</span><span class="params">(DWORD dwOldAddr, DWORD dwNewAddr)</span> </span>&#123;</span><br><span class="line">	BOOL bRet = FALSE;</span><br><span class="line">	dwRetAddress = dwOldAddr + PATCH_LENGTH;       <span class="comment">// hook结束以后的返回地址</span></span><br><span class="line">	BYTE byJmpCode[PATCH_LENGTH] = &#123; <span class="number">0xe9</span> &#125;;</span><br><span class="line">	DWORD dwOldProtect;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 之前的字节码</span></span><br><span class="line">	<span class="type">static</span> BYTE byOriginalCode[PATCH_LENGTH] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	<span class="type">static</span> BOOL bHookFlag = FALSE;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 测试用</span></span><br><span class="line">	<span class="type">char</span> buf[<span class="number">1024</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 1. 初始化byJmpCode</span></span><br><span class="line">	<span class="built_in">memset</span>(&amp;byJmpCode[<span class="number">1</span>], <span class="number">0x90</span>, PATCH_LENGTH - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2. 存储跳转地址</span></span><br><span class="line">	*(DWORD*)&amp;byJmpCode[<span class="number">1</span>] = (DWORD)dwNewAddr - (DWORD)dwOldAddr - <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 3. 备份被覆盖的code</span></span><br><span class="line">	<span class="built_in">memcpy</span>(byOriginalCode, (LPVOID)dwOldAddr, PATCH_LENGTH);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 4. 开始patch</span></span><br><span class="line">	<span class="keyword">if</span> (!bHookFlag)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// hook</span></span><br><span class="line">		<span class="built_in">VirtualProtect</span>((LPVOID)dwOldAddr,</span><br><span class="line">			PATCH_LENGTH, PAGE_EXECUTE_READWRITE, &amp;dwOldProtect);     <span class="comment">// 这个是成功执行的</span></span><br><span class="line"></span><br><span class="line">		</span><br><span class="line">		<span class="built_in">memcpy</span>((LPVOID)dwOldAddr, byJmpCode, PATCH_LENGTH);     <span class="comment">// 这里拷贝的时候有问题，会出现不可写的问题</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		<span class="built_in">VirtualProtect</span>((LPVOID)dwOldAddr, PATCH_LENGTH, dwOldProtect, <span class="number">0</span>);</span><br><span class="line">		bHookFlag = TRUE;</span><br><span class="line">		bRet = TRUE;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="comment">// 取消hook</span></span><br><span class="line">		<span class="built_in">VirtualProtect</span>((LPVOID)dwOldAddr,</span><br><span class="line">			PATCH_LENGTH, PAGE_EXECUTE_READWRITE, &amp;dwOldProtect);</span><br><span class="line">		<span class="built_in">memcpy</span>((LPVOID)dwOldAddr, byOriginalCode, PATCH_LENGTH);</span><br><span class="line">		<span class="built_in">VirtualProtect</span>((LPVOID)dwOldAddr, PATCH_LENGTH, dwOldProtect, <span class="number">0</span>);</span><br><span class="line">		bHookFlag = FALSE;</span><br><span class="line">		bRet = TRUE;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> bRet;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> szNewText[] = <span class="string">&quot;Hook!&quot;</span>;</span><br><span class="line"><span class="type">void</span> __declspec(naked) <span class="built_in">MyglBegin</span>(GLenum mode) &#123;</span><br><span class="line">	<span class="comment">// GL_TRIANGLE_STRIP 0x0005</span></span><br><span class="line">	<span class="comment">// GL_TRIANGLE_FAN 0x0006</span></span><br><span class="line">	__asm &#123;</span><br><span class="line">		<span class="comment">// 1. 保存寄存器</span></span><br><span class="line">		pushad;</span><br><span class="line">		pushfd;</span><br><span class="line">		<span class="comment">// 2. 修改数据</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// 判断mode 原[esp+8] 现在的[esp+32+4+4]</span></span><br><span class="line">		mov eax, dword ptr[esp + <span class="number">32</span> + <span class="number">4</span> + <span class="number">4</span>];   <span class="comment">// eax=mode</span></span><br><span class="line">		cmp eax, <span class="number">5</span>;</span><br><span class="line">		jz disable;</span><br><span class="line">		cmp eax, <span class="number">6</span>;</span><br><span class="line">		jz disable;</span><br><span class="line">		jmp back_to_func;</span><br><span class="line">	&#125;</span><br><span class="line">disable:</span><br><span class="line">	<span class="comment">// 调用glDisable</span></span><br><span class="line">	<span class="built_in">glDisable</span>(GL_DEPTH_TEST);</span><br><span class="line">	__asm &#123;</span><br><span class="line"></span><br><span class="line">	back_to_func:</span><br><span class="line">		<span class="comment">// 3. 恢复寄存器</span></span><br><span class="line">		popfd;</span><br><span class="line">		popad;</span><br><span class="line">		<span class="comment">// 4. 执行覆盖的代码</span></span><br><span class="line">		mov edi, edi;</span><br><span class="line">		push ebp;</span><br><span class="line">		mov ebp, esp;</span><br><span class="line">		<span class="comment">// 5. 返回执行</span></span><br><span class="line">		jmp dwRetAddress;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体效果：</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202410/3445027-20241002170034711-1203745879.png" alt="image-20241002170033786"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0"><span class="toc-number">1.</span> <span class="toc-text">CS1.6破解笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-%E6%97%A0%E9%99%90%E9%87%91%E9%92%B1"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 无限金钱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-%E9%80%8F%E8%A7%86%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.</span> <span class="toc-text">0x02 透视实现</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&text=CS1.6破解笔记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&title=CS1.6破解笔记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&is_video=false&description=CS1.6破解笔记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CS1.6破解笔记&body=Check out this article: https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&title=CS1.6破解笔记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&title=CS1.6破解笔记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&title=CS1.6破解笔记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&title=CS1.6破解笔记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&name=CS1.6破解笔记&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/09/26/CS1-6%E7%A0%B4%E8%A7%A3%E7%AC%94%E8%AE%B0/&t=CS1.6破解笔记"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    bananaships
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

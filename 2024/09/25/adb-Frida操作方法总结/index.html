@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Frida基本使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="adb+Frida操作方法总结">
+<meta property="og:url" content="https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="黄昏之时.">
+<meta property="og:description" content="Frida基本使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202408/3445027-20240804110256613-1337540399.png">
+<meta property="article:published_time" content="2024-09-25T03:37:06.000Z">
+<meta property="article:modified_time" content="2024-09-25T03:45:44.079Z">
+<meta property="article:author" content="bananaships">
+<meta property="article:tag" content="Frida">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3445027/202408/3445027-20240804110256613-1337540399.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>adb+Frida操作方法总结</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/09/25/pwn%E9%A2%98%E6%97%A5%E8%AE%B0-BUU%E7%89%88/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/09/25/nepctf-WP/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&text=adb+Frida操作方法总结"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&title=adb+Frida操作方法总结"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&is_video=false&description=adb+Frida操作方法总结"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=adb+Frida操作方法总结&body=Check out this article: https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&title=adb+Frida操作方法总结"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&title=adb+Frida操作方法总结"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&title=adb+Frida操作方法总结"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&title=adb+Frida操作方法总结"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&name=adb+Frida操作方法总结&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&t=adb+Frida操作方法总结"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">adb + Frida操作方法总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-adb%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 adb简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFadb"><span class="toc-number">1.1.1.</span> <span class="toc-text">一、什么是adb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8adb"><span class="toc-number">1.1.2.</span> <span class="toc-text">二、为什么要用adb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81adb%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.1.3.</span> <span class="toc-text">三、adb命令详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BD%BF%E7%94%A8%E9%97%AE%E9%A2%98%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.1.4.</span> <span class="toc-text">四、使用问题详解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Frida%E7%AE%80%E4%BB%8B"><span class="toc-number">1.2.</span> <span class="toc-text">0x02 Frida简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFFrida"><span class="toc-number">1.2.1.</span> <span class="toc-text">一、什么是Frida</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Frida%E7%9A%84%E7%94%A8%E9%80%94"><span class="toc-number">1.2.2.</span> <span class="toc-text">二、Frida的用途</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">三、如何使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Frida-%E5%AE%9E%E6%88%98%EF%BC%88%E6%AD%A3%E6%96%87%E5%BC%80%E5%A7%8B%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">0x03 Frida 实战（正文开始）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-number">1.3.1.</span> <span class="toc-text">一、前备知识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Hook%EF%BC%88Hooking%EF%BC%89%E7%AE%80%E4%BB%8B"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">Hook（Hooking）简介</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8Hook%E4%BF%AE%E6%94%B9%E8%A2%AB%E8%B0%83%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%E7%9A%84%E9%80%BB%E8%BE%91%EF%BC%8C%E8%BF%94%E5%9B%9E%E5%80%BC%EF%BC%8C%E4%BC%A0%E5%85%A5%E5%8F%82%E6%95%B0"><span class="toc-number">1.3.2.</span> <span class="toc-text">二、使用Hook修改被调用的方法的逻辑，返回值，传入参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">1、基本模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E4%BE%8B%E9%A2%98%E8%AE%B2%E8%A7%A3"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">2、例题讲解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onCreate%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">onCreate方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#check%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.2.4.</span> <span class="toc-text">check方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-random"><span class="toc-number">1.3.2.5.</span> <span class="toc-text">get_random</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hook-begin"><span class="toc-number">1.3.2.6.</span> <span class="toc-text">Hook begin!</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Hook-get-random%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.2.6.1.</span> <span class="toc-text">Hook get_random方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.2.6.1.1.</span> <span class="toc-text">实现代码</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        adb+Frida操作方法总结
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">bananaships</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-09-25T03:37:06.000Z" class="dt-published" itemprop="datePublished">2024-09-25</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Android/">Android</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Frida/" rel="tag">Frida</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="adb-Frida操作方法总结"><a href="#adb-Frida操作方法总结" class="headerlink" title="adb + Frida操作方法总结"></a>adb + Frida操作方法总结</h1><p>本文多借鉴于SWDD师傅的博客哇，感谢师傅~</p>
+<h2 id="0x01-adb简介"><a href="#0x01-adb简介" class="headerlink" title="0x01 adb简介"></a>0x01 adb简介</h2><h3 id="一、什么是adb"><a href="#一、什么是adb" class="headerlink" title="一、什么是adb"></a>一、什么是adb</h3><p>ADB 全称为 Android Debug Bridge，起到调试桥的作用，是一个客户端-服务器端程序。其中客户端是用来操作的电脑，服务端是 Android 设备。</p>
+<p>ADB 也是 Android SDK 中的一个工具，可以直接操作管理 Android 模拟器或者真实的 Android 设备。</p>
+<h3 id="二、为什么要用adb"><a href="#二、为什么要用adb" class="headerlink" title="二、为什么要用adb"></a>二、为什么要用adb</h3><p>运行设备的 shell(命令行)<br>管理模拟器或设备的端口映射<br>计算机和设备之间上传&#x2F;下载文件<br>可以对设备的应用进行卸载安装等<br>在 App 遇到 ANR&#x2F;Crash 等 bug 时，可以通过 ADB 来抓取日志</p>
+<p>简而言之，ADB 就是连接 Android 手机与 PC 端的桥梁，所以ADB又称为安卓调试桥（注意：是安卓，不是iOS），可以让用户在电脑上对手机进行全面的操作！</p>
+<h3 id="三、adb命令详解"><a href="#三、adb命令详解" class="headerlink" title="三、adb命令详解"></a>三、adb命令详解</h3><p>1、基本命令</p>
+<p><code>adb version : 显示adb版本</code></p>
+<p><code>adb help ：帮助信息，查看adb所支持的所有命令</code></p>
+<p><code>adb devices：查看当前连接的设备，已连接的设备会显示出来</code></p>
+<p><code>adb get-serialno：也可以查看设备号</code></p>
+<p>2、权限命令</p>
+<p><code>adb root：获取Android管理员（root用户）的权限。</code></p>
+<p>注意：一般测试机可使用root权限。</p>
+<p>Android版本9以上，不支持商用机使用root权限，但可以修改底层一些配置</p>
+<p><code>adb shell：登录设备 shell，该命令将登录设备的shell（内核），登录shell后，可以使用 cd，ls，rm 等Linux命令</code></p>
+<p>3、建立连接</p>
+<p><code>adb -d：如果同时连了usb，又开了模拟器，连接当前唯一通过usb连接的安卓设备</code></p>
+<p><code>adb -e shell：指定当前连接此电脑的唯一的一个模拟器</code></p>
+<p><code>adb -s &lt;设备号&gt; shell：当电脑插多台手机或模拟器时，指定一个设备号进行连接</code></p>
+<p><code>exit：退出</code></p>
+<p><code>adb kill-server：杀死当前adb服务，如果连不上设备时，杀掉重启。（没事不要用它）</code></p>
+<p><code>adb start-server：杀掉后重启</code></p>
+<h3 id="四、使用问题详解"><a href="#四、使用问题详解" class="headerlink" title="四、使用问题详解"></a>四、使用问题详解</h3><p>解决ADB卡在等待调试器的问题 <strong>Waiting For Debugger is waiting for the debugger to attach</strong>.</p>
+<p>调试 Android 应用时，习惯于看到“等待调试器”对话框。 此对话框将显示，直到调试器附加到要调试的应用的进程，以便对其进行调试。</p>
+<p>有时，由于各种未知和奇怪的原因，可能会发生此对话框不会消失的情况，因此无法继续调试会话。</p>
+<p>解决方案可能是重新启动您的设备&#x2F;模拟器，并杀死&#x2F;重新启动Android Studio。 这是一个相当沉重的解决方案，会让您浪费大量时间。</p>
+<p>您只需在终端中运行以下代码即可避免所有这些重新启动：</p>
+<p><code>adb shell am clear-debug-app</code></p>
+<p>然后重启一下adb服务，正常连接调试设备即可</p>
+<h2 id="0x02-Frida简介"><a href="#0x02-Frida简介" class="headerlink" title="0x02 Frida简介"></a>0x02 Frida简介</h2><h3 id="一、什么是Frida"><a href="#一、什么是Frida" class="headerlink" title="一、什么是Frida"></a>一、什么是Frida</h3><p>Frida 是一款基于 Python + JavaScript 的 Hook 与调试框架。</p>
+<p>Firda 是一款易用的跨平 Hook 工具， Java 层到 Native 层的 Hook 无所不能，是一种 动态 的插桩工具，可以插入代码到原生 App 的内存空间中，动态的去监视和修改行为，原生平台包括 Win、Mac、Linux、Android、iOS 全平台。</p>
+<p>静态二进制插桩：在程序执行前插入额外的代码和数据，生成一个永久改变的可执行文件。<br>动态二进制插桩：在程序运行时实时地插入额外代码和数据，对可执行文件没有任何永久改变。<br>Frida 的功能如同油猴插件，通过油猴插件编写的脚本可以直接改变网页的编码方式。</p>
+<p>大部分 App 对于我们来说都是黑盒，对 App 进行逆向和动态调试、或自动化分析、需要不断的进行动态调试，Frida 通过使用 Python 注入 JavaScript 脚本，都是通过 JS 脚本来操作设备上的 Java代码。</p>
+<p>如果需要持久化的 Hook 还是需要通过 Xposed 等框架，但是 Frida 的动态和灵活性对逆向和自动化逆向提供了很大帮助。</p>
+<p>对于逆向操作破解来说方便，安装环境和配置环境要求简单兼容性好。<br>选择动态调试函数会遇到各种反调试、崩溃，相比xposed而言，frida优势是其动态执行不需要重启。<br>因为Frida大致原理是手机端安装一个server程序，然后把手机端的端口转到PC端，PC端写python脚本进行通信，而python脚本中需要hook的代码采用javascript语言。</p>
+<h3 id="二、Frida的用途"><a href="#二、Frida的用途" class="headerlink" title="二、Frida的用途"></a>二、Frida的用途</h3><p><strong>访问进程的内存</strong>：</p>
+<ul>
+<li>Frida 可以直接访问并修改目标进程的内存内容。这对于调试和逆向工程非常有用，特别是在需要分析或修改应用程序数据时。</li>
+</ul>
+<p><strong>应用程序运行时覆盖功能</strong>：</p>
+<ul>
+<li>通过 Frida，开发者可以在运行时覆盖应用程序的某些功能。这意味着可以在不修改源代码的情况下，改变应用程序的行为，进行功能测试和故障排除。</li>
+</ul>
+<p><strong>从导入的类调用函数</strong>：</p>
+<ul>
+<li>Frida 允许开发者在运行时调用应用程序中的任意函数，包括那些从外部库导入的函数。这对于调试和功能扩展非常有用，因为可以直接与应用程序的内部逻辑交互。</li>
+</ul>
+<p><strong>动态 Hook 跟踪、拦截函数</strong>：</p>
+<ul>
+<li>Frida 的动态 Hook 功能使得开发者可以拦截并修改函数调用。这意味着可以在函数调用之前或之后执行自定义代码，记录调用信息，甚至改变函数的输入输出。这对于安全研究、调试和性能分析都非常有帮助。</li>
+</ul>
+<h3 id="三、如何使用"><a href="#三、如何使用" class="headerlink" title="三、如何使用"></a>三、如何使用</h3><p><code>Frida</code> 分为客户端和服务端。</p>
+<p>客户端：PC（控制端）</p>
+<p>服务器：手机设备（被控制端）</p>
+<p>客户端编写的 <code>Python</code> 代码，用于连接远程设备，提交要注入的 <code>JS</code> 代码到服务端，接受服务端发来的消息。</p>
+<p>服务端中需要用 <code>JS</code> 代码注入到目标进程，操作内存数据，给客户端发送消息。</p>
+<p>使用命令<code>frida-ps</code>查看客户端的进程情况，使用命令<code>frida-ps -U</code>查看服务端的进程情况。</p>
+<h2 id="0x03-Frida-实战（正文开始）"><a href="#0x03-Frida-实战（正文开始）" class="headerlink" title="0x03 Frida 实战（正文开始）"></a>0x03 Frida 实战（正文开始）</h2><h3 id="一、前备知识"><a href="#一、前备知识" class="headerlink" title="一、前备知识"></a>一、前备知识</h3><h4 id="Hook（Hooking）简介"><a href="#Hook（Hooking）简介" class="headerlink" title="Hook（Hooking）简介"></a>Hook（Hooking）简介</h4><p>让我们从非常基础的知识开始。</p>
+<p><strong>什么是钩子？</strong></p>
+<p><strong>Hook</strong>是指拦截和修改应用程序或Android系统中函数或方法行为的过程。例如，我们可以钩取我们应用程序中的一个方法，并通过插入我们自己的实现来改变其功能。</p>
+<p>现在，让我们尝试在一个应用程序中钩取一个方法。我们将使用JavaScript API 来完成这个任务，但值得注意的是，Frida也支持Python的调用，我们同样可以使用python代码并插入js片段来实现frida的一系列操作。</p>
+<h3 id="二、使用Hook修改被调用的方法的逻辑，返回值，传入参数"><a href="#二、使用Hook修改被调用的方法的逻辑，返回值，传入参数" class="headerlink" title="二、使用Hook修改被调用的方法的逻辑，返回值，传入参数"></a>二、使用Hook修改被调用的方法的逻辑，返回值，传入参数</h3><h4 id="1、基本模板"><a href="#1、基本模板" class="headerlink" title="1、基本模板"></a>1、基本模板</h4><p>首先展示一下注入的模板：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">var</span> &lt;class_reference&gt; = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;&lt;package_name&gt;.&lt;class&gt;&quot;</span>);</span><br><span class="line">  &lt;class_reference&gt;.&lt;method_to_hook&gt;.<span class="property">implementation</span> = <span class="keyword">function</span>(<span class="params">&lt;args&gt;</span>) &#123;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      我们自己的方法实现</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"> </span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Java.perform</code> 是 Frida 中用于创建一个特殊上下文的函数，让你的脚本能够与 Android 应用程序中的 Java 代码进行交互。它就像是打开了一扇门，让你能够访问并操纵应用程序内部运行的 Java 代码。一旦进入这个上下文，你就可以执行诸如钩取方法或访问 Java 类等操作来控制或观察应用程序的行为。</li>
+<li><code>var &lt;class_reference&gt; = Java.use(&quot;&lt;package_name&gt;.&lt;class&gt;&quot;);</code><br>在这里，你声明一个变量 <code>&lt;class_reference&gt;</code> 来表示目标 Android 应用程序中的一个 Java 类。你使用 <code>Java.use</code> 函数指定要使用的类，该函数接受类名作为参数。<code>&lt;package_name&gt;</code> 表示 Android 应用程序的包名，<code>&lt;class&gt;</code> 表示你想要与之交互的类。</li>
+<li><code>&lt;class_reference&gt;.&lt;method_to_hook&gt;.implementation = function(&lt;args&gt;) &#123;&#125;</code><br>在所选的类内部，通过 <code>&lt;class_reference&gt;.&lt;method_to_hook&gt;</code> 符号访问你想要钩取的方法。这是你可以定义自己的逻辑以在钩取的方法被调用时执行的地方。<code>&lt;args&gt;</code> 表示传递给函数的参数。</li>
+</ul>
+<p>来个实例如下：</p>
+<p>其中<code>&lt;package_name&gt;</code> ：com.ad2001.frida0x1</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202408/3445027-20240804110256613-1337540399.png" alt="image-20240804110252428"></p>
+<h4 id="2、例题讲解"><a href="#2、例题讲解" class="headerlink" title="2、例题讲解"></a>2、例题讲解</h4><p>通过Jadx分析Frida-labs 0x1</p>
+<h4 id="onCreate方法"><a href="#onCreate方法" class="headerlink" title="onCreate方法"></a>onCreate方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle bundle)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>.onCreate(bundle);</span><br><span class="line">    setContentView(C0570R.layout.activity_main);</span><br><span class="line">    <span class="keyword">final</span> <span class="type">EditText</span> <span class="variable">editText</span> <span class="operator">=</span> (EditText) findViewById(C0570R.C0573id.editTextTextPassword);</span><br><span class="line">    <span class="built_in">this</span>.f103t1 = (TextView) findViewById(C0570R.C0573id.textview1);</span><br><span class="line">    <span class="keyword">final</span> <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> get_random();</span><br><span class="line">    ((Button) findViewById(C0570R.C0573id.button)).setOnClickListener(<span class="keyword">new</span> <span class="title class_">View</span>.OnClickListener() &#123; <span class="comment">// from class: com.ad2001.frida0x1.MainActivity.1</span></span><br><span class="line">        <span class="meta">@Override</span> <span class="comment">// android.view.View.OnClickListener</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onClick</span><span class="params">(View view)</span> &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">obj</span> <span class="operator">=</span> editText.getText().toString();</span><br><span class="line">            <span class="keyword">if</span> (TextUtils.isDigitsOnly(obj)) &#123;</span><br><span class="line">                MainActivity.<span class="built_in">this</span>.check(i, Integer.parseInt(obj));</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                Toast.makeText(MainActivity.<span class="built_in">this</span>.getApplicationContext(), <span class="string">&quot;Enter a valid number !!&quot;</span>, <span class="number">1</span>).show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以发现，在onCreate方法中，有一个监听事件，监听了button的点击，当按钮点击下去之后，程序首先判断输入是不是数字，是数字的话，就将其从string转化为int，再进入check中与i比较，因此我们需要检查check方法。</p>
+<h4 id="check方法"><a href="#check方法" class="headerlink" title="check方法"></a>check方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">check</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> i2)</span> &#123;</span><br><span class="line">       <span class="keyword">if</span> ((i * <span class="number">2</span>) + <span class="number">4</span> == i2) &#123;</span><br><span class="line">           Toast.makeText(getApplicationContext(), <span class="string">&quot;Yey you guessed it right&quot;</span>, <span class="number">1</span>).show();</span><br><span class="line">           <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">           <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i3</span> <span class="operator">=</span> <span class="number">0</span>; i3 &lt; <span class="number">20</span>; i3++) &#123;</span><br><span class="line">               <span class="type">char</span> <span class="variable">charAt</span> <span class="operator">=</span> <span class="string">&quot;AMDYV&#123;WVWT_CJJF_0s1&#125;&quot;</span>.charAt(i3);</span><br><span class="line">               <span class="keyword">if</span> (charAt &lt; <span class="string">&#x27;a&#x27;</span> || charAt &gt; <span class="string">&#x27;z&#x27;</span>) &#123;</span><br><span class="line">                   <span class="keyword">if</span> (charAt &gt;= <span class="string">&#x27;A&#x27;</span>) &#123;</span><br><span class="line">                       <span class="keyword">if</span> (charAt &lt;= <span class="string">&#x27;Z&#x27;</span>) &#123;</span><br><span class="line">                           charAt = (<span class="type">char</span>) (charAt - <span class="number">21</span>);</span><br><span class="line">                           <span class="keyword">if</span> (charAt &gt;= <span class="string">&#x27;A&#x27;</span>) &#123;</span><br><span class="line">                           &#125;</span><br><span class="line">                           charAt = (<span class="type">char</span>) (charAt + <span class="number">26</span>);</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br><span class="line">                   sb.append(charAt);</span><br><span class="line">               &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                   charAt = (<span class="type">char</span>) (charAt - <span class="number">21</span>);</span><br><span class="line">                   <span class="keyword">if</span> (charAt &gt;= <span class="string">&#x27;a&#x27;</span>) &#123;</span><br><span class="line">                       sb.append(charAt);</span><br><span class="line">                   &#125;</span><br><span class="line">                   charAt = (<span class="type">char</span>) (charAt + <span class="number">26</span>);</span><br><span class="line">                   sb.append(charAt);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="built_in">this</span>.f103t1.setText(sb.toString());</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       Toast.makeText(getApplicationContext(), <span class="string">&quot;Try again&quot;</span>, <span class="number">1</span>).show();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>本方法显而易见就是检查输入是否能够满足i*2 + 4 &#x3D;&#x3D; i2,如果满足则将flag输出到f103t1所绑定的textView控件上,其中用于判断的i则来自get_random。</p>
+<h4 id="get-random"><a href="#get-random" class="headerlink" title="get_random"></a>get_random</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">get_random</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Random</span>().nextInt(<span class="number">100</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>显而易见，本方法就只是普通的返回一个随机数。</p>
+<h4 id="Hook-begin"><a href="#Hook-begin" class="headerlink" title="Hook begin!"></a>Hook begin!</h4><p>对于本样例程序，首先我们可以直接hook程序逻辑。更改随机产生的值为一个固定值。或者hook check方法更改check方法传入的参数</p>
+<h5 id="Hook-get-random方法"><a href="#Hook-get-random方法" class="headerlink" title="Hook get_random方法"></a>Hook get_random方法</h5><h6 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h6><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">hook</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> <span class="title class_">MainActivity</span> = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;com.ad2001.frida0x1.MainActivity&quot;</span>);</span><br><span class="line">    <span class="title class_">MainActivity</span>.<span class="property">get_random</span>.<span class="property">implementation</span> = <span class="keyword">function</span> (<span class="params"></span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span> (<span class="params"></span>)&#123;</span><br><span class="line">        <span class="title function_">hook</span>();</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="title function_">setImmediate</span>(main);</span><br></pre></td></tr></table></figure>
+
+<p>代码解释如下：</p>
+<ol>
+<li>首先定义了一个名为<code>hook</code>的JavaScript函数，其中包含了对目标应用特定方法的hook逻辑。<ul>
+<li><code>hook</code>函数通过Frida的Java API来获取目标应用中的<code>MainActivity</code>类。</li>
+<li>然后，它通过<code>Java.use()</code>方法获取了<code>MainActivity</code>类的引用，使得我们可以访问该类的方法。</li>
+<li>最后，<code>hook</code>函数将<code>MainActivity</code>类中的<code>get_random</code>方法进行了修改。它用自定义的实现替换了原有方法的实现，使得每次调用<code>get_random</code>方法时都返回固定值0。</li>
+</ul>
+</li>
+<li>接着定义了一个名为<code>main</code>的JavaScript函数，其中包含了Frida的<code>Java.perform()</code>方法，用于执行指定的hook逻辑。</li>
+<li>最后，通过<code>setImmediate()</code>函数调用<code>main</code>函数，确保在Frida脚本启动后立即执行。</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">adb + Frida操作方法总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-adb%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 adb简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFadb"><span class="toc-number">1.1.1.</span> <span class="toc-text">一、什么是adb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8adb"><span class="toc-number">1.1.2.</span> <span class="toc-text">二、为什么要用adb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81adb%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.1.3.</span> <span class="toc-text">三、adb命令详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BD%BF%E7%94%A8%E9%97%AE%E9%A2%98%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.1.4.</span> <span class="toc-text">四、使用问题详解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Frida%E7%AE%80%E4%BB%8B"><span class="toc-number">1.2.</span> <span class="toc-text">0x02 Frida简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFFrida"><span class="toc-number">1.2.1.</span> <span class="toc-text">一、什么是Frida</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Frida%E7%9A%84%E7%94%A8%E9%80%94"><span class="toc-number">1.2.2.</span> <span class="toc-text">二、Frida的用途</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">三、如何使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Frida-%E5%AE%9E%E6%88%98%EF%BC%88%E6%AD%A3%E6%96%87%E5%BC%80%E5%A7%8B%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">0x03 Frida 实战（正文开始）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-number">1.3.1.</span> <span class="toc-text">一、前备知识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Hook%EF%BC%88Hooking%EF%BC%89%E7%AE%80%E4%BB%8B"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">Hook（Hooking）简介</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8Hook%E4%BF%AE%E6%94%B9%E8%A2%AB%E8%B0%83%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95%E7%9A%84%E9%80%BB%E8%BE%91%EF%BC%8C%E8%BF%94%E5%9B%9E%E5%80%BC%EF%BC%8C%E4%BC%A0%E5%85%A5%E5%8F%82%E6%95%B0"><span class="toc-number">1.3.2.</span> <span class="toc-text">二、使用Hook修改被调用的方法的逻辑，返回值，传入参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">1、基本模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E4%BE%8B%E9%A2%98%E8%AE%B2%E8%A7%A3"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">2、例题讲解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onCreate%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">onCreate方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#check%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.2.4.</span> <span class="toc-text">check方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-random"><span class="toc-number">1.3.2.5.</span> <span class="toc-text">get_random</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hook-begin"><span class="toc-number">1.3.2.6.</span> <span class="toc-text">Hook begin!</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Hook-get-random%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.2.6.1.</span> <span class="toc-text">Hook get_random方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.2.6.1.1.</span> <span class="toc-text">实现代码</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&text=adb+Frida操作方法总结"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&title=adb+Frida操作方法总结"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&is_video=false&description=adb+Frida操作方法总结"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=adb+Frida操作方法总结&body=Check out this article: https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&title=adb+Frida操作方法总结"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&title=adb+Frida操作方法总结"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&title=adb+Frida操作方法总结"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&title=adb+Frida操作方法总结"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&name=adb+Frida操作方法总结&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/09/25/adb-Frida%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/&t=adb+Frida操作方法总结"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    bananaships
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

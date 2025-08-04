@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="记一次动调apk">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次动调apk">
+<meta property="og:url" content="https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/index.html">
+<meta property="og:site_name" content="黄昏之时.">
+<meta property="og:description" content="记一次动调apk">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606164329476-263582952.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606164329624-1456941277.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606164329613-2131913807.png">
+<meta property="article:published_time" content="2024-06-06T08:41:16.000Z">
+<meta property="article:modified_time" content="2024-07-18T02:16:09.063Z">
+<meta property="article:author" content="bananaships">
+<meta property="article:tag" content="apk">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606164329476-263582952.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>记一次动调apk</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/06/06/DLL%E5%9F%BA%E7%A1%80%E4%BB%A5%E5%8F%8A%E6%B3%A8%E5%85%A5/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/06/06/PE%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-%E4%BA%8C/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&text=记一次动调apk"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&title=记一次动调apk"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&is_video=false&description=记一次动调apk"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=记一次动调apk&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&title=记一次动调apk"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&title=记一次动调apk"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&title=记一次动调apk"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&title=记一次动调apk"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&name=记一次动调apk&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&t=记一次动调apk"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk"><span class="toc-number">1.</span> <span class="toc-text">记第一次动调apk</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E9%85%8D%E7%BD%AEadb"><span class="toc-number">1.1.</span> <span class="toc-text">一.配置adb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E9%A2%98%E7%82%B9%E8%A7%A3%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">二.题点解析</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        记一次动调apk
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">bananaships</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-06-06T08:41:16.000Z" class="dt-published" itemprop="datePublished">2024-06-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Android/">Android</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/apk/" rel="tag">apk</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="记第一次动调apk"><a href="#记第一次动调apk" class="headerlink" title="记第一次动调apk"></a>记第一次动调apk</h1><p>是24XY里的一道题，就单纯一道简单的安卓题，主要考查的点就是动调apk，记录下来的原因是踩了不少坑，毕竟第一次JEB动调apk</p>
+<h2 id="一-配置adb"><a href="#一-配置adb" class="headerlink" title="一.配置adb"></a>一.配置adb</h2><p>​	ADB 全称为 Android Debug Bridge，起到调试桥的作用，是一个<strong>客户端-服务器端程序</strong>。其中客户端是用来操作的电脑，服务端是 Android 设备。</p>
+<p>下载链接：</p>
+<p><code>Windows版本：https://dl.google.com/android/repository/platform-tools-latest-windows.zip</code><br><code>Mac版本：https://dl.google.com/android/repository/platform-tools-latest-windows.zip</code><br><code>Linux版本：https://dl.google.com/android/repository/platform-tools-latest-linux.zip</code></p>
+<p>然后使用详解的话可以参考这篇博客<a target="_blank" rel="noopener" href="https://blog.csdn.net/Python_0011/article/details/132040387">ADB安装及使用详解（非常详细）从零基础入门到精通，看完这一篇就够了-CSDN博客</a></p>
+<h2 id="二-题点解析"><a href="#二-题点解析" class="headerlink" title="二.题点解析"></a>二.题点解析</h2><p>​	这道题主要就是考查配置起apk的调试状态，分为两个目标进行达成，一是修改AndroidManifest中debuggable属性，第二个是修改ro.debuggable属性，其中第二个可以在下面链接中查看进行修改，我主要说说第一个，修改AndroidManifest中debuggable属性。<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_30496695/article/details/80425676">让apk变可调试_如何修改 允许调试 安卓 apk-CSDN博客</a></p>
+<p>​	想要修改AndroidManifest中debuggable属性，首先需要对你的apk进行解包，这里我使用的是ApkTool 进行解包和打包，下载链接是<a target="_blank" rel="noopener" href="https://ibotpeaches.github.io/Apktool/%EF%BC%8C%E7%84%B6%E5%90%8E%E5%B0%86apktool.jar%E6%94%BE%E7%BD%AE%E5%9C%A8%E4%B8%8E%E4%BD%A0%E7%9A%84apk%E5%90%8C%E7%9B%AE%E5%BD%95%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%EF%BC%8C%E5%90%8C%E6%97%B6%E4%BD%A0%E8%BF%98%E9%9C%80%E8%A6%81%E4%B8%80%E4%B8%AA%E7%AD%BE%E5%90%8D%E7%9A%84jar%EF%BC%8C%E7%94%A8%E4%BA%8E%E5%B0%86%E8%A7%A3%E5%8C%85%E4%BF%AE%E6%94%B9%E5%AE%8C%E4%B9%8B%E5%90%8E%E7%9A%84apk%E5%86%8D%E9%87%8D%E6%96%B0%E7%AD%BE%E5%90%8D%E4%B8%80%E6%AC%A1%EF%BC%8C%E4%B8%8D%E7%84%B6%E8%BF%99%E4%B8%AAapk%E4%B8%8D%E8%83%BD%E8%A3%85%E8%BD%BD%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%8A%EF%BC%8C%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E5%8F%AF%E4%BB%A5%E5%8E%BB%E7%BD%91%E4%B8%8A%E6%90%9C%EF%BC%8C%E5%86%8D%E6%9C%89%E5%B0%B1%E6%98%AF%E7%94%A8%E4%BA%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%AF%86%E9%92%A5%E6%96%87%E4%BB%B6%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%8E%BB%E4%B8%8B%E9%9D%A2%E8%BF%99%E4%B8%AA%E6%96%87%E7%AB%A0%E5%BC%84[APK%E9%87%8D%E6%96%B0%E7%AD%BE%E5%90%8D%E6%88%96%E8%80%85%E6%9B%B4%E6%94%B9%E7%AD%BE%E5%90%8D%E8%AF%A6%E7%BB%86%E6%AD%A5%E9%AA%A4-CSDN%E5%8D%9A%E5%AE%A2](https://blog.csdn.net/Memory64/article/details/134434739?ops_request_misc=%7B%22request_id%22:%22171534160916800178586049%22,%22scm%22:%2220140713.130102334..%22%7D&request_id=171534160916800178586049&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-134434739-null-null.142%5Ev100%5Epc_search_result_base7&utm_term=apk%E6%9B%B4%E6%94%B9%E7%AD%BE%E5%90%8D&spm=1018.2226.3001.4187)%EF%BC%8C%E6%9C%80%E5%90%8E%E6%94%AF%E6%92%91%E6%96%87%E4%BB%B6%E5%A6%82%E4%B8%8B%E5%A6%82%E6%89%80%E7%A4%BA%EF%BC%9A%EF%BC%88demo%E6%98%AF%E5%B7%B2%E8%A7%A3%E5%8C%85%E4%B9%8B%E5%90%8E%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%EF%BC%8C777.apk%E6%98%AF%E5%8E%9Fapk%E9%87%8D%E6%96%B0%E6%89%93%E5%8C%85%E7%9A%84%E6%96%87%E4%BB%B6%EF%BC%89">https://ibotpeaches.github.io/Apktool/，然后将apktool.jar放置在与你的apk同目录的文件夹下，同时你还需要一个签名的jar，用于将解包修改完之后的apk再重新签名一次，不然这个apk不能装载虚拟机上，这个文件可以去网上搜，再有就是用于签名的两个密钥文件，可以去下面这个文章弄[APK重新签名或者更改签名详细步骤-CSDN博客](https://blog.csdn.net/Memory64/article/details/134434739?ops_request_misc=%7B%22request%5Fid%22%3A%22171534160916800178586049%22%2C%22scm%22%3A%2220140713.130102334..%22%7D&amp;request_id=171534160916800178586049&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-134434739-null-null.142^v100^pc_search_result_base7&amp;utm_term=apk更改签名&amp;spm=1018.2226.3001.4187)，最后支撑文件如下如所示：（demo是已解包之后的文件夹，777.apk是原apk重新打包的文件）</a></p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606164329476-263582952.png" alt="image-20240510234243171"></p>
+<p>​	拿到上述支撑文件就可以开始了</p>
+<p>​	解包命令：<code>java -jar apktool_2.9.3.jar d DebugMe.apk -o demo</code></p>
+<p>​	之后在包中找到AndroidManifest.xml并将android:debuggable&#x3D;”true”添加进application中，下列示例代码的最后一行：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- application标签加上android:debuggable=&quot;true&quot; --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">application</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:allowBackup</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:icon</span>=<span class="string">&quot;@mipmap/ic_launcher&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:label</span>=<span class="string">&quot;@string/app_name&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:roundIcon</span>=<span class="string">&quot;@mipmap/ic_launcher_round&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:debuggable</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>​	然后再用打包命令：<code>java -jar apktool_2.9.3.jar b demo -o 777.apk</code>（注意java版本别用太低，之前卡了好久在这儿，最后换了个高一点的版本才打包成功）</p>
+<p>​	最后就是签名命令<code>jarsigner -verbose -keystore kkkey.jks -signedjar 777.apk 777.apk android.keystore</code>，用到了上文中提到的两个秘钥支撑文件</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606164329624-1456941277.png" alt="image-20240510235117269"></p>
+<p>​	签名成功，拖进虚拟机也安装成功，直接打开JEB开始动调！</p>
+<p><img src="https://img2023.cnblogs.com/blog/3445027/202406/3445027-20240606164329613-2131913807.png" alt="image-20240511000110943"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk"><span class="toc-number">1.</span> <span class="toc-text">记第一次动调apk</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E9%85%8D%E7%BD%AEadb"><span class="toc-number">1.1.</span> <span class="toc-text">一.配置adb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E9%A2%98%E7%82%B9%E8%A7%A3%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">二.题点解析</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&text=记一次动调apk"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&title=记一次动调apk"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&is_video=false&description=记一次动调apk"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=记一次动调apk&body=Check out this article: https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&title=记一次动调apk"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&title=记一次动调apk"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&title=记一次动调apk"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&title=记一次动调apk"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&name=记一次动调apk&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://bananashipsbbq.github.io/2024/06/06/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%8A%A8%E8%B0%83apk/&t=记一次动调apk"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    bananaships
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
